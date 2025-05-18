@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Interface\" />
+    <Folder Include="Interface\" />
+    <Folder Include="PaggingItems\" />
     <Folder Include="PaggingItems\" />
   </ItemGroup>
 
