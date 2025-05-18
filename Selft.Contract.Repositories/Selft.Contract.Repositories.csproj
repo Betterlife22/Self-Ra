@@ -8,11 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Interface\" />
-    <Folder Include="Interface\" />
-    <Folder Include="PaggingItems\" />
     <Folder Include="PaggingItems\" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
