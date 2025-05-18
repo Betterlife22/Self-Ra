@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Selfra_Entity.Model;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace Selfra_Entity
 {
-    public class SelfRaDBContext :DbContext
+    public class SelfRaDBContext : IdentityDbContext<ApplicationUser>
+
     {
         public SelfRaDBContext(DbContextOptions<SelfRaDBContext> options) :base(options) 
         {
@@ -16,6 +19,7 @@ namespace Selfra_Entity
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Transaction>()
                 .Property(t => t.Total)
                 .HasPrecision(18, 2);

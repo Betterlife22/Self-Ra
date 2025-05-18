@@ -12,21 +12,47 @@ namespace Selfra_Entity.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ApplicationUsers",
+                name: "AspNetRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DayOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUsers", x => x.UserId);
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DayOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,6 +144,112 @@ namespace Selfra_Entity.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -140,10 +272,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categories_ApplicationUsers_CreatorId",
+                        name: "FK_Categories_AspNetUsers_CreatorId",
                         column: x => x.CreatorId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -171,10 +303,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_Mentors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Mentors_ApplicationUsers_UserId",
+                        name: "FK_Mentors_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -199,10 +331,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_ApplicationUsers_UserId",
+                        name: "FK_Posts_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -230,10 +362,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_SportsActivities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SportsActivities_ApplicationUsers_UserId",
+                        name: "FK_SportsActivities_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -261,10 +393,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_ReadingProgresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReadingProgresses_ApplicationUsers_UserId",
+                        name: "FK_ReadingProgresses_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ReadingProgresses_Books_BookId",
@@ -295,10 +427,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_ConversationParticipants", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ConversationParticipants_ApplicationUsers_UserId",
+                        name: "FK_ConversationParticipants_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ConversationParticipants_Conversations_ConversationId",
@@ -331,10 +463,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_ApplicationUsers_SenderId",
+                        name: "FK_Messages_AspNetUsers_SenderId",
                         column: x => x.SenderId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Messages_Conversations_ConversationId",
@@ -363,10 +495,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_UserNewsPreferences", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserNewsPreferences_ApplicationUsers_UserId",
+                        name: "FK_UserNewsPreferences_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserNewsPreferences_NewsCategories_NewTagId",
@@ -398,10 +530,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_UserPackages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserPackages_ApplicationUsers_UserId",
+                        name: "FK_UserPackages_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserPackages_Packages_PackageId",
@@ -438,10 +570,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_ApplicationUsers_CreatorId",
+                        name: "FK_Courses_AspNetUsers_CreatorId",
                         column: x => x.CreatorId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Courses_Categories_CategoryId",
@@ -473,10 +605,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_MentorContacts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MentorContacts_ApplicationUsers_UserId",
+                        name: "FK_MentorContacts_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MentorContacts_Mentors_MentorId",
@@ -509,10 +641,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_ForumComments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ForumComments_ApplicationUsers_UserId",
+                        name: "FK_ForumComments_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ForumComments_Posts_PostId",
@@ -543,10 +675,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_PostVotes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PostVotes_ApplicationUsers_UserId",
+                        name: "FK_PostVotes_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PostVotes_Posts_PostId",
@@ -670,10 +802,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_UserCourseProgresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserCourseProgresses_ApplicationUsers_UserId",
+                        name: "FK_UserCourseProgresses_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserCourseProgresses_Courses_CourseId",
@@ -704,10 +836,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_CommentVotes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CommentVotes_ApplicationUsers_UserId",
+                        name: "FK_CommentVotes_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CommentVotes_ForumComments_CommentId",
@@ -803,10 +935,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_UserLessonProgresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserLessonProgresses_ApplicationUsers_UserId",
+                        name: "FK_UserLessonProgresses_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserLessonProgresses_Lessons_LessonId",
@@ -863,10 +995,10 @@ namespace Selfra_Entity.Migrations
                 {
                     table.PrimaryKey("PK_QuizResults", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuizResults_ApplicationUsers_UserId",
+                        name: "FK_QuizResults_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "UserId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_QuizResults_Quizzes_QuizId",
@@ -902,6 +1034,45 @@ namespace Selfra_Entity.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_CreatorId",
@@ -1093,6 +1264,21 @@ namespace Selfra_Entity.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
                 name: "CommentVotes");
 
             migrationBuilder.DropTable(
@@ -1138,6 +1324,9 @@ namespace Selfra_Entity.Migrations
                 name: "UserNewsPreferences");
 
             migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "ForumComments");
 
             migrationBuilder.DropTable(
@@ -1177,7 +1366,7 @@ namespace Selfra_Entity.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "ApplicationUsers");
+                name: "AspNetUsers");
         }
     }
 }
