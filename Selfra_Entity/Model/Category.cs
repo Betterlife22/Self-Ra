@@ -14,7 +14,7 @@ namespace Selfra_Entity.Model
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public string CreatorId { get; set; }
+        public Guid CreatorId { get; set; }
 
         public ApplicationUser Creator { get; set; }
         public ICollection<Course> Courses { get; set; }

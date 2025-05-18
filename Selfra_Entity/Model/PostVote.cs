@@ -9,7 +9,7 @@ namespace Selfra_Entity.Model
 {
     public class PostVote:BaseEntity
     {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public int PostId { get; set; }
         public int VoteValue { get; set; }
         public DateTime VotedAt { get; set; }

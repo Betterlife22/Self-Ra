@@ -9,7 +9,7 @@ namespace Selfra_Entity.Model
 {
     public class UserLessonProgress :BaseEntity
     {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public int LessonId { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime? WatchedAt { get; set; }

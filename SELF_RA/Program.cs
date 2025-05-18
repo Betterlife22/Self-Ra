@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Selfra_Entity;
 using Selfra_Entity.Model;
+using Selfra_Repositories.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<SelfraDBContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+// Configure Identity
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedAccount = true;
+
+
+})
+
+
+.AddEntityFrameworkStores<SelfraDBContext>().AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider);
 
 var app = builder.Build();
 

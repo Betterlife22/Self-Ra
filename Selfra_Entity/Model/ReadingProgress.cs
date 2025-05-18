@@ -9,7 +9,7 @@ namespace Selfra_Entity.Model
 {
     public class ReadingProgress:BaseEntity
     {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public int BookId { get; set; }
         public int CurrentPage { get; set; }
         public TimeSpan CurrentPosition { get; set; }

@@ -9,7 +9,7 @@ namespace Selfra_Entity.Model
 {
     public class UserPackage:BaseEntity
     {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public int PackageId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

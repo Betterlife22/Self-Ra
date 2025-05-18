@@ -10,7 +10,7 @@ namespace Selfra_Entity.Model
     public class ConversationParticipant : BaseEntity
     {
         public int ConversationId { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public DateTime JoinedAt { get; set; }
         public bool IsAdmin { get; set; }
         public virtual Conversation Conversation { get; set; }

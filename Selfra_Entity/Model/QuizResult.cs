@@ -10,7 +10,7 @@ namespace Selfra_Entity.Model
     public class QuizResult:BaseEntity
     {
         public int QuizId { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public int Score { get; set; }
         public DateTime TakenAt { get; set; }
 
