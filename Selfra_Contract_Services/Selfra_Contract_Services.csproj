@@ -10,4 +10,10 @@
     <Folder Include="Interface\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Selfra_Core\Selfra_Core.csproj" />
+    <ProjectReference Include="..\Selfra_ModelViews\Selfra_ModelViews.csproj" />
+    <ProjectReference Include="..\Selft.Contract.Repositories\Selft.Contract.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>

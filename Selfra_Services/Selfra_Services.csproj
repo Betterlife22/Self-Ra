@@ -11,4 +11,8 @@
     <Folder Include="Service\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Selfra_Contract_Services\Selfra_Contract_Services.csproj" />
+  </ItemGroup>
+
 </Project>
