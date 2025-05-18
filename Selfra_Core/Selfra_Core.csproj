@@ -7,14 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Store\**" />
+    <EmbeddedResource Remove="Store\**" />
+    <None Remove="Store\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
     <Folder Include="Constaint\" />
     <Folder Include="ExceptionCustom\" />
     <Folder Include="Constaint\" />
     <Folder Include="ExceptionCustom\" />
     <Folder Include="Utils\" />
-    <Folder Include="Store\" />
     <Folder Include="Utils\" />
-    <Folder Include="Store\" />
   </ItemGroup>
 </Project>

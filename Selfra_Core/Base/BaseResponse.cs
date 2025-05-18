@@ -51,4 +51,3 @@ namespace Selfra_Core.Base
         }
     }
 }
-}
