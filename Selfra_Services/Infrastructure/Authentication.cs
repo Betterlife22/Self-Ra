@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Selfra_Core.Base;
 using Selfra_Entity.Model;
-using Selfra_ModelViews.UserModel;
+using Selfra_ModelViews.Model.UserModel;
 using Selft.Contract.Repositories.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,10 +14,10 @@ namespace Selfra_Services.Infrastructure
 {
     public class Authentication
     {
-        public static async Task<TokenResponse> CreateToken(ApplicationUser? user, string role, JwtSettings jwtSettings, IUnitOfWork unitOfWork, bool isRefresh = false, string ipAddress = null!)
+        public static async Task<TokenResponse> CreateToken(ApplicationUser? user, string role, JwtSettings jwtSettings, bool isRefresh = false)
         {
             // Tạo ra các claims
-            DateTime now = DateTime.UtcNow;
+            DateTime now = DateTime.Now;
 
             // Danh sách các claims chung cho cả Access Token và Refresh Token
             List<Claim> claims = new List<Claim>

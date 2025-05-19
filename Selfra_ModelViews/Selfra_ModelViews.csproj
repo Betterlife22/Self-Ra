@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Selfra_Core\Selfra_Core.csproj" />
+    <ProjectReference Include="..\Selfra_Entity\Selfra_Entity.csproj" />
+  </ItemGroup>
+
 </Project>

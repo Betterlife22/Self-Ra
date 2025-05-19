@@ -1,6 +1,4 @@
-﻿
-
-namespace Selfra_ModelViews.UserModel
+﻿namespace Selfra_ModelViews.Model.UserModel
 {
     public class ResponseUserModel
     {
