@@ -273,8 +273,7 @@ namespace Selfra_Repositories.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatorId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatorId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -286,8 +285,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categories_AspNetUsers_CreatorId1",
-                        column: x => x.CreatorId1,
+                        name: "FK_Categories_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -297,13 +296,12 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExpertiseAreas = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Rating = table.Column<float>(type: "real", nullable: false),
                     TotalReviews = table.Column<int>(type: "int", nullable: false),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -315,8 +313,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_Mentors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Mentors_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Mentors_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -326,11 +324,10 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -342,8 +339,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Posts_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -353,12 +350,11 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ActivityType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Duration = table.Column<int>(type: "int", nullable: false),
                     CaloriesBurned = table.Column<float>(type: "real", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -370,8 +366,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_SportsActivities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SportsActivities_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_SportsActivities_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -381,12 +377,11 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BookId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CurrentPage = table.Column<int>(type: "int", nullable: false),
                     CurrentPosition = table.Column<TimeSpan>(type: "time", nullable: false),
                     IsFinished = table.Column<bool>(type: "bit", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -398,8 +393,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_ReadingProgresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReadingProgresses_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_ReadingProgresses_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -415,9 +410,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ConversationId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -429,8 +423,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_ConversationParticipants", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ConversationParticipants_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_ConversationParticipants_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -446,11 +440,10 @@ namespace Selfra_Repositories.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ConversationId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    SenderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MessageType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsRead = table.Column<bool>(type: "bit", nullable: false),
-                    SenderId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -462,8 +455,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_AspNetUsers_SenderId1",
-                        column: x => x.SenderId1,
+                        name: "FK_Messages_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -478,9 +471,8 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     NewsCategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -492,8 +484,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_UserNewsPreferences", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserNewsPreferences_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_UserNewsPreferences_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -508,10 +500,9 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     PackageId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -523,8 +514,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_UserPackages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserPackages_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_UserPackages_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -544,12 +535,11 @@ namespace Selfra_Repositories.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccessType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatorId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Level = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Duration = table.Column<int>(type: "int", nullable: false),
                     IsPublished = table.Column<bool>(type: "bit", nullable: false),
-                    CreatorId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -561,8 +551,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_AspNetUsers_CreatorId1",
-                        column: x => x.CreatorId1,
+                        name: "FK_Courses_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -578,10 +568,9 @@ namespace Selfra_Repositories.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     MentorId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -593,8 +582,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_MentorContacts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MentorContacts_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_MentorContacts_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -610,9 +599,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PostId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -624,8 +612,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_ForumComments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ForumComments_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_ForumComments_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -640,10 +628,9 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     PostId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     VoteValue = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -655,8 +642,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_PostVotes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PostVotes_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_PostVotes_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -754,12 +741,11 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CourseId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ProgressPercentage = table.Column<float>(type: "real", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -771,8 +757,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_UserCourseProgresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserCourseProgresses_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_UserCourseProgresses_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -787,10 +773,9 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CommentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     VoteValue = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -802,8 +787,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_CommentVotes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CommentVotes_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_CommentVotes_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -878,10 +863,9 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     LessonId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -893,8 +877,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_UserLessonProgresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserLessonProgresses_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_UserLessonProgresses_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -934,9 +918,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     QuizId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Score = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -948,8 +931,8 @@ namespace Selfra_Repositories.Migrations
                 {
                     table.PrimaryKey("PK_QuizResults", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuizResults_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_QuizResults_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -1024,9 +1007,9 @@ namespace Selfra_Repositories.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_CreatorId1",
+                name: "IX_Categories_CreatorId",
                 table: "Categories",
-                column: "CreatorId1");
+                column: "CreatorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CommentVotes_CommentId",
@@ -1034,9 +1017,9 @@ namespace Selfra_Repositories.Migrations
                 column: "CommentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommentVotes_UserId1",
+                name: "IX_CommentVotes_UserId",
                 table: "CommentVotes",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ConversationParticipants_ConversationId",
@@ -1044,9 +1027,9 @@ namespace Selfra_Repositories.Migrations
                 column: "ConversationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConversationParticipants_UserId1",
+                name: "IX_ConversationParticipants_UserId",
                 table: "ConversationParticipants",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_CategoryId",
@@ -1054,9 +1037,9 @@ namespace Selfra_Repositories.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_CreatorId1",
+                name: "IX_Courses_CreatorId",
                 table: "Courses",
-                column: "CreatorId1");
+                column: "CreatorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FoodDetails_LessonId",
@@ -1069,9 +1052,9 @@ namespace Selfra_Repositories.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ForumComments_UserId1",
+                name: "IX_ForumComments_UserId",
                 table: "ForumComments",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lessons_CourseId",
@@ -1089,14 +1072,14 @@ namespace Selfra_Repositories.Migrations
                 column: "MentorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MentorContacts_UserId1",
+                name: "IX_MentorContacts_UserId",
                 table: "MentorContacts",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mentors_UserId1",
+                name: "IX_Mentors_UserId",
                 table: "Mentors",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ConversationId",
@@ -1104,14 +1087,14 @@ namespace Selfra_Repositories.Migrations
                 column: "ConversationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_SenderId1",
+                name: "IX_Messages_SenderId",
                 table: "Messages",
-                column: "SenderId1");
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_UserId1",
+                name: "IX_Posts_UserId",
                 table: "Posts",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostVotes_PostId",
@@ -1119,9 +1102,9 @@ namespace Selfra_Repositories.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostVotes_UserId1",
+                name: "IX_PostVotes_UserId",
                 table: "PostVotes",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuizAnswers_QuestionId",
@@ -1139,9 +1122,9 @@ namespace Selfra_Repositories.Migrations
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuizResults_UserId1",
+                name: "IX_QuizResults_UserId",
                 table: "QuizResults",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Quizzes_CourseId",
@@ -1154,14 +1137,14 @@ namespace Selfra_Repositories.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReadingProgresses_UserId1",
+                name: "IX_ReadingProgresses_UserId",
                 table: "ReadingProgresses",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SportsActivities_UserId1",
+                name: "IX_SportsActivities_UserId",
                 table: "SportsActivities",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_UserPackageId",
@@ -1174,9 +1157,9 @@ namespace Selfra_Repositories.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserCourseProgresses_UserId1",
+                name: "IX_UserCourseProgresses_UserId",
                 table: "UserCourseProgresses",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserLessonProgresses_LessonId",
@@ -1184,9 +1167,9 @@ namespace Selfra_Repositories.Migrations
                 column: "LessonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserLessonProgresses_UserId1",
+                name: "IX_UserLessonProgresses_UserId",
                 table: "UserLessonProgresses",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserNewsPreferences_NewsCategoryId",
@@ -1194,9 +1177,9 @@ namespace Selfra_Repositories.Migrations
                 column: "NewsCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserNewsPreferences_UserId1",
+                name: "IX_UserNewsPreferences_UserId",
                 table: "UserNewsPreferences",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserPackages_PackageId",
@@ -1204,9 +1187,9 @@ namespace Selfra_Repositories.Migrations
                 column: "PackageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserPackages_UserId1",
+                name: "IX_UserPackages_UserId",
                 table: "UserPackages",
-                column: "UserId1");
+                column: "UserId");
         }
 
         /// <inheritdoc />

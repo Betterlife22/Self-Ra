@@ -9,7 +9,7 @@ namespace Selfra_Entity.Model
         public string? Description { get; set; }
         public string? AccessType { get; set; }
         public string? CategoryId { get; set; }
-        public string? CreatorId { get; set; }
+        public Guid? CreatorId { get; set; }
         public string? ThumbnailUrl { get; set; }
         public string? Level { get; set; }
         public int Duration { get; set; }

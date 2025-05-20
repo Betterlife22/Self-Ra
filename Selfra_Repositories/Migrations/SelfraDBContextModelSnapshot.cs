@@ -351,10 +351,7 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CreatorId1")
+                    b.Property<Guid?>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DeletedBy")
@@ -380,7 +377,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId1");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Categories");
                 });
@@ -411,10 +408,7 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime>("LastUpdatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("VoteValue")
@@ -424,7 +418,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasIndex("CommentId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("CommentVotes");
                 });
@@ -492,17 +486,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime>("LastUpdatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ConversationId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ConversationParticipants");
                 });
@@ -524,10 +515,7 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CreatorId1")
+                    b.Property<Guid?>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DeletedBy")
@@ -567,7 +555,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("CreatorId1");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Courses");
                 });
@@ -655,17 +643,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("PostId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ForumComments");
                 });
@@ -819,15 +804,12 @@ namespace Selfra_Repositories.Migrations
                     b.Property<int>("TotalReviews")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Mentors");
                 });
@@ -864,17 +846,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MentorId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("MentorContacts");
                 });
@@ -914,17 +893,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("MessageType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SenderId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("SenderId1")
+                    b.Property<Guid?>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ConversationId");
 
-                    b.HasIndex("SenderId1");
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
                 });
@@ -1041,15 +1017,12 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -1080,10 +1053,7 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("PostId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("VoteValue")
@@ -1093,7 +1063,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("PostVotes");
                 });
@@ -1244,17 +1214,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("QuizId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("QuizResults");
                 });
@@ -1294,17 +1261,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime>("LastUpdatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ReadingProgresses");
                 });
@@ -1344,15 +1308,12 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("SportsActivities");
                 });
@@ -1434,17 +1395,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<float>("ProgressPercentage")
                         .HasColumnType("real");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserCourseProgresses");
                 });
@@ -1478,17 +1436,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("LessonId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LessonId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserLessonProgresses");
                 });
@@ -1519,17 +1474,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("NewsCategoryId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NewsCategoryId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserNewsPreferences");
                 });
@@ -1563,17 +1515,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PackageId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserPackages");
                 });
@@ -1633,7 +1582,7 @@ namespace Selfra_Repositories.Migrations
                 {
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId1");
+                        .HasForeignKey("CreatorId");
 
                     b.Navigation("Creator");
                 });
@@ -1646,7 +1595,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Comment");
 
@@ -1661,7 +1610,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Conversation");
 
@@ -1676,7 +1625,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId1");
+                        .HasForeignKey("CreatorId");
 
                     b.Navigation("Category");
 
@@ -1700,7 +1649,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Post");
 
@@ -1729,7 +1678,7 @@ namespace Selfra_Repositories.Migrations
                 {
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1742,7 +1691,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Mentor");
 
@@ -1757,7 +1706,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "Sender")
                         .WithMany()
-                        .HasForeignKey("SenderId1");
+                        .HasForeignKey("SenderId");
 
                     b.Navigation("Conversation");
 
@@ -1768,7 +1717,7 @@ namespace Selfra_Repositories.Migrations
                 {
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1781,7 +1730,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Post");
 
@@ -1823,7 +1772,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Quiz");
 
@@ -1838,7 +1787,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Book");
 
@@ -1849,7 +1798,7 @@ namespace Selfra_Repositories.Migrations
                 {
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1871,7 +1820,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Course");
 
@@ -1886,7 +1835,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Lesson");
 
@@ -1901,7 +1850,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("NewsCategory");
 
@@ -1916,7 +1865,7 @@ namespace Selfra_Repositories.Migrations
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Package");
 

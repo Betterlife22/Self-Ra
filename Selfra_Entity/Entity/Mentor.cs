@@ -4,7 +4,7 @@ namespace Selfra_Entity.Model
 {
     public class Mentor :BaseEntity
     {
-        public string? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string? Bio { get; set; }
         public string? ExpertiseAreas { get; set; }
         public float Rating { get; set; }

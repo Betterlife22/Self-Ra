@@ -4,7 +4,7 @@ namespace Selfra_Entity.Model
 {
     public class SportsActivity:BaseEntity
     {
-        public string? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string? ActivityType { get; set; }
         public int Duration { get; set; }
         public float CaloriesBurned { get; set; }

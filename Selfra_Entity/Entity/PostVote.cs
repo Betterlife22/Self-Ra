@@ -4,7 +4,7 @@ namespace Selfra_Entity.Model
 {
     public class PostVote:BaseEntity
     {
-        public string? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string? PostId { get; set; }
         public int VoteValue { get; set; }
         public virtual ApplicationUser? User { get; set; }

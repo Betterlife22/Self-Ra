@@ -5,7 +5,7 @@ namespace Selfra_Entity.Model
     public class QuizResult:BaseEntity
     {
         public string? QuizId { get; set; }
-        public string? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public int Score { get; set; }
 
         public virtual Quiz? Quiz { get; set; }

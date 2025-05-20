@@ -4,7 +4,7 @@ namespace Selfra_Entity.Model
 {
     public class UserLessonProgress :BaseEntity
     {
-        public string? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string? LessonId { get; set; }
         public bool IsCompleted { get; set; }
 

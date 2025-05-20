@@ -5,7 +5,7 @@ namespace Selfra_Entity.Model
     public class Message :BaseEntity
     {
         public string? ConversationId { get; set; }
-        public string? SenderId { get; set; }
+        public Guid? SenderId { get; set; }
         public string? Content { get; set; }
         public string? MessageType { get; set; }
         public bool IsRead { get; set; }
