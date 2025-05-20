@@ -7,14 +7,31 @@ namespace Selfra_Repositories.Base
 {
     public class SelfraDBContextFactory : IDesignTimeDbContextFactory<SelfraDBContext>
     {
-        public SelfraDBContext CreateDbContext(string[] args)
-        {
 
-            var builder = new DbContextOptionsBuilder<SelfraDBContext>();
+       
+            public SelfraDBContext CreateDbContext(string[] args)
+            {
 
-            builder.UseSqlServer("Server=.;Database=SelfRa_DB;uid=sa;pwd=1234567890;Trusted_Connection=True;TrustServerCertificate=True");
+                //var builder = new DbContextOptionsBuilder<SelfraDBContext>();
 
-            return new SelfraDBContext(builder.Options);
+                //builder.UseSqlServer("Server=.;Database=SelfRa_DB;uid=sa;pwd=1234567890;Trusted_Connection=True;TrustServerCertificate=True");
+
+                //return new SelfraDBContext(builder.Options);
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory()) 
+               .AddJsonFile("appsettings.development.json")
+               .AddEnvironmentVariables()
+               .Build();
+
+                // Get connection string
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+                var builder = new DbContextOptionsBuilder<SelfraDBContext>();
+                builder.UseSqlServer(connectionString);
+
+                return new SelfraDBContext(builder.Options);
+            }
         }
-    }
+
+    
 }
