@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Selfra_ModelViews.Model.CourseModel
+{
+    public class CourseViewModel
+    {
+        public string? Title { get; set; }
+        public string? Slug { get; set; }
+        public string? Description { get; set; }
+        public string? AccessType { get; set; }
+        public string? CategoryName { get; set; }
+        public string? CreatorName { get; set; }
+        public string? ThumbnailUrl { get; set; }
+        public string? Level { get; set; }
+        public int Duration { get; set; }
+        public bool IsPublished { get; set; }
+    }
+}
