@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Selfra_Core.Base;
 using Selfra_Repositories.Base;
 using Selft.Contract.Repositories.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Selfra_Repositories.Repositories
 {
@@ -40,7 +35,10 @@ namespace Selfra_Repositories.Repositories
         {
             _dbSet.Update(entity);
         }
-
+        public async Task<PaginatedList<T>> GetPagingAsync(IQueryable<T> query, int pageIndex, int pageSize)
+        {
+            return await PaginatedList<T>.CreateAsync(query, pageIndex, pageSize);
+        }
         public async Task DeleteAsync(object id)
         {
             var entity = await _dbSet.FindAsync(id);

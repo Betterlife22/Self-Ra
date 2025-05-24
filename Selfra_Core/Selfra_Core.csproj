@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.16" />
     <Folder Include="Constaint\" />
     <Folder Include="ExceptionCustom\" />
     <Folder Include="Constaint\" />

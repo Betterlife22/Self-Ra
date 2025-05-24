@@ -16,4 +16,8 @@
     <Folder Include="Interface\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Selfra_Core\Selfra_Core.csproj" />
+  </ItemGroup>
+
 </Project>
