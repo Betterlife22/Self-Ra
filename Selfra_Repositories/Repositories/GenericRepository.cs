@@ -2,6 +2,7 @@
 using Selfra_Core.Base;
 using Selfra_Repositories.Base;
 using Selft.Contract.Repositories.Interface;
+using System.Linq.Expressions;
 
 namespace Selfra_Repositories.Repositories
 {

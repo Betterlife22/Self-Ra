@@ -8,7 +8,7 @@ namespace Selfra_Entity.Model
         public string? LessonId { get; set; }
         public bool IsCompleted { get; set; }
 
-        public ApplicationUser? User { get; set; }
-        public Lesson? Lesson { get; set; }
+        public virtual ApplicationUser? User { get; set; }
+        public virtual Lesson? Lesson { get; set; }
     }
 }

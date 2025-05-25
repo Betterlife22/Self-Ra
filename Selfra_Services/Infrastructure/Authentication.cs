@@ -2,10 +2,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Selfra_Core.Base;
+using Selfra_Core.Constaint;
+using Selfra_Core.ExceptionCustom;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.UserModel;
 using Selft.Contract.Repositories.Interface;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -186,6 +189,18 @@ namespace Selfra_Services.Infrastructure
         public class UnauthorizedException : Exception
         {
             public UnauthorizedException(string message) : base(message) { }
+        }
+        public static async Task HandleForbiddenRequest(HttpContext context)
+        {
+            int code = (int)HttpStatusCode.Forbidden;
+            var error = new ErrorException(code, ResponseCodeConstants.FORBIDDEN, "You don't have permission to access this feature");
+            string result = JsonSerializer.Serialize(error);
+
+            context.Response.ContentType = "application/json";
+            context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+            context.Response.StatusCode = code;
+
+            await context.Response.WriteAsync(result);
         }
     }
 }

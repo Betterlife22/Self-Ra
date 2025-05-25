@@ -16,9 +16,9 @@ namespace Selfra_Entity.Model
         public bool IsPublished { get; set; }
      
 
-        public Category? Category { get; set; }
-        public ApplicationUser? Creator { get; set; }
-        public ICollection<Lesson>? Lessons { get; set; }
-        public ICollection<Quiz>? Quizzes { get; set; }
+        public virtual Category? Category { get; set; }
+        public virtual ApplicationUser? Creator { get; set; }
+        public virtual ICollection<Lesson>? Lessons { get; set; }
+        public virtual ICollection<Quiz>? Quizzes { get; set; }
     }
 }

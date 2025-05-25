@@ -14,8 +14,8 @@ namespace Selfra_Entity.Model
         public bool IsFreePreview { get; set; }
         public string? LessonType { get; set; }
 
-        public Course? Course { get; set; }
-        public ICollection<MeditationLessonContent>? MeditationLessonContents { get; set; }
-        public ICollection<FoodDetail>? FoodDetails { get; set; }
+        public virtual Course? Course { get; set; }
+        public virtual ICollection<MeditationLessonContent>? MeditationLessonContents { get; set; }
+        public virtual ICollection<FoodDetail>? FoodDetails { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using Selfra_Repositories.Base;
 namespace Selfra_Repositories.Migrations
 {
     [DbContext(typeof(SelfraDBContext))]
-    [Migration("20250520090118_InitMigration")]
+    [Migration("20250525084156_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />
@@ -981,6 +981,7 @@ namespace Selfra_Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -1076,9 +1077,6 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Answer")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CourseId")
                         .HasColumnType("nvarchar(450)");
 
@@ -1099,9 +1097,6 @@ namespace Selfra_Repositories.Migrations
 
                     b.Property<DateTime>("LastUpdatedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Question")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -1351,6 +1346,7 @@ namespace Selfra_Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserPackageId")

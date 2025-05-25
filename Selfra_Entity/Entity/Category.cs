@@ -8,7 +8,7 @@ namespace Selfra_Entity.Model
         public string? Slug { get; set; }
         public string? Description { get; set; }
         public Guid? CreatorId { get; set; }
-        public ApplicationUser? Creator { get; set; }
-        public ICollection<Course>? Courses { get; set; }
+        public virtual ApplicationUser? Creator { get; set; }
+        public virtual ICollection<Course>? Courses { get; set; }
     }
 }

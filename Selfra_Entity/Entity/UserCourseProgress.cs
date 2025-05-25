@@ -9,8 +9,8 @@ namespace Selfra_Entity.Model
         public float ProgressPercentage { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime? CompletedAt { get; set; }
-        public ApplicationUser? User { get; set; }
-        public Course? Course { get; set; }
+        public virtual ApplicationUser? User { get; set; }
+        public virtual Course? Course { get; set; }
 
     }
 }

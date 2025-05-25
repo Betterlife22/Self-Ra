@@ -37,6 +37,7 @@ namespace Selfra_Services
             services.AddScoped<ICourseProgressService, CourseProgressService>();
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IQuizzService, QuizzService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAuthService, AuthService>();   
         }

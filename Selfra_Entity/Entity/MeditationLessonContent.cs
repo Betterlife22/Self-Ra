@@ -14,7 +14,7 @@ namespace Selfra_Entity.Model
         public int Duration { get; set; }
         public bool IsFreePreview { get; set; }
 
-        public Lesson? Lesson { get; set; }
+        public virtual Lesson? Lesson { get; set; }
 
     }
 }

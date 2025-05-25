@@ -15,14 +15,15 @@ namespace Selfra_Repositories.Base
             //builder.UseSqlServer("Server=.;Database=SelfRa_DB;uid=sa;pwd=1234567890;Trusted_Connection=True;TrustServerCertificate=True");
 
             //return new SelfraDBContext(builder.Options);
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-           .SetBasePath(Directory.GetCurrentDirectory()) // or use AppContext.BaseDirectory if needed
-           .AddJsonFile("appsettings.json")
-           .AddEnvironmentVariables()
-           .Build();
+            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
-            // Get connection string
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
+                .Build();
+
+            string connectionString = configuration.GetConnectionString("DefaultConnection");
 
             var builder = new DbContextOptionsBuilder<SelfraDBContext>();
             builder.UseSqlServer(connectionString);
