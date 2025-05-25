@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Selfra_Entity.Model;
+using System.Reflection.Emit;
 
 namespace Selfra_Repositories.Base
 {
@@ -10,7 +11,17 @@ namespace Selfra_Repositories.Base
         public SelfraDBContext(DbContextOptions<SelfraDBContext> options) : base(options) {
 
         }
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.Total)
+                .HasPrecision(18, 2);
+            modelBuilder.Entity<Package>()
+                .Property(t => t.Price)
+                .HasPrecision(18, 2);
+
+        }
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<CommentVote> CommentVotes { get; set; }

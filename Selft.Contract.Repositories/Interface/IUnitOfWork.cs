@@ -1,5 +1,7 @@
 ﻿
 
+using Microsoft.AspNetCore.Http;
+
 namespace Selft.Contract.Repositories.Interface
 {
     public interface IUnitOfWork : IDisposable
@@ -10,5 +12,6 @@ namespace Selft.Contract.Repositories.Interface
         void BeginTransaction();
         void CommitTransaction();
         void RollBack();
+        Task<string> UploadFileAsync(IFormFile file);
     }
 }

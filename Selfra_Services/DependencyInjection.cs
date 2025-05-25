@@ -32,6 +32,11 @@ namespace Selfra_Services
         public static void AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<ICourseProgressService, CourseProgressService>();
+            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAuthService, AuthService>();   
         }
