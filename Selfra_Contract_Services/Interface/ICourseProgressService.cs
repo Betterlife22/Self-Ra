@@ -11,10 +11,14 @@ namespace Selfra_Contract_Services.Interface
     {
         Task<CourseProgessViewModel> GetUserCourseProgessAsync(string userid, string courseid);
         Task<List<CourseProgessViewModel>> GetAllUserCourseProgessAsync(string userid);
-        Task EnrollCourse(CourseEnrollModel courseEnrollModel,string userid);
+        Task EnrollCourse(CourseEnrollModel courseEnrollModel);
 
         //Task<List<LessonProgressViewModel>> GetLessonProgressInCourse(string courseid, string userid);
         Task StartLesson(LessonStartModel lessonStartModel, string userid);
+        Task CalculateProgress(string userid, string courseid);
+
+        Task MarkLessonComplete(string userid, string lessonid);
+
 
 
     }

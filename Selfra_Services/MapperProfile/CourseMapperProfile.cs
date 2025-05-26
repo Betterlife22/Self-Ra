@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Selfra_Core.Constaint;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.CategoryModel;
 using Selfra_ModelViews.Model.CourseModel;
@@ -17,11 +18,18 @@ namespace Selfra_Services.MapperProfile
         public CourseMapperProfile()
         {
             CreateMap<Course, CourseModifyModel>().ReverseMap();
-            CreateMap<Course, CourseViewModel>().ReverseMap();
-            CreateMap<UserCourseProgress, CourseProgessViewModel>().ReverseMap();
+            CreateMap<Course, CourseViewModel>().ForMember(dest => dest.CreatorName,
+               opt => opt.MapFrom(src => src.Creator != null ? src.Creator.UserName : "Unknown"))
+               .ReverseMap();
+
+            CreateMap<UserCourseProgress, CourseProgessViewModel>().ForMember(dest => dest.CourseName,
+               opt => opt.MapFrom(src => src.Course != null ? src.Course.Title : "Unknown"))
+                .ReverseMap();
+
             CreateMap<UserCourseProgress, CourseEnrollModel>().ReverseMap();
 
-            CreateMap<Category,CategoryViewModel>().ReverseMap();
+            CreateMap<Category,CategoryViewModel>().ForMember(dest => dest.CreatorName,
+               opt => opt.MapFrom(src => src.Creator != null ? src.Creator.UserName : "Unknown")).ReverseMap();
             CreateMap<Category,CategoryModifyModel>().ReverseMap();
 
             CreateMap<Quiz,QuizzModifyModel>().ReverseMap();

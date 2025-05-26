@@ -4,6 +4,7 @@ using Microsoft.VisualBasic;
 using Selfra_Contract_Services.Interface;
 using Selfra_Core.Base;
 using Selfra_Entity.Model;
+using Selfra_ModelViews.Model.CategoryModel;
 using Selfra_ModelViews.Model.CourseModel;
 using Selfra_ModelViews.Model.ProgressModel;
 
@@ -15,10 +16,19 @@ namespace SELF_RA.Controllers
     {
         private readonly ICourseService _courseService;
         private readonly ICourseProgressService _courseProgressService;
-        public CourseController(ICourseService courseService, ICourseProgressService courseProgressService)
+        private readonly ICategoryService _categoryService;
+        public CourseController(ICourseService courseService, ICourseProgressService courseProgressService, ICategoryService categoryService)
         {
             _courseService = courseService;
             _courseProgressService = courseProgressService;
+            _categoryService = categoryService;
+        }
+        [HttpPost("CreateCategory")]
+        public async Task<IActionResult> CreateCategory([FromForm] CategoryModifyModel categoryModifyModel)
+        {
+            await _categoryService.CreateCategory(categoryModifyModel);
+            var response = BaseResponseModel<string>.OkMessageResponseModel("Create Successfull");
+            return new OkObjectResult(response);
         }
         [HttpPost("CreateCourse")]
         public async Task<IActionResult> CreateCourse([FromForm] CourseModifyModel courseModifyModel)
@@ -31,7 +41,7 @@ namespace SELF_RA.Controllers
         public async Task<IActionResult> GetAllCourse()
         {
             var courseList = await _courseService.GetAllCourse();
-            var response = BaseResponseModel<List<CourseViewModel>>.OkDataResponse(courseList, "Load successfull");
+            var response = BaseResponseModel<PaginatedList<CourseViewModel>>.OkDataResponse(courseList, "Load successfull");
             return new OkObjectResult(response);
         }
         [HttpGet("GetCourseById")]
@@ -45,11 +55,18 @@ namespace SELF_RA.Controllers
             var response = BaseResponseModel<CourseViewModel>.OkDataResponse(course, "Load successfully");
             return new OkObjectResult(response);
         }
-
-        [HttpPost("EnrollCourse")]
-        public async Task<IActionResult> EnrollCourse([FromBody] CourseEnrollModel courseEnrollModel , [FromQuery] string userid)
+        [HttpGet("GetCoursesByCategory")]
+        public async Task<IActionResult> GetCoursesByCategory([FromQuery] string CategoryId)
         {
-            await _courseProgressService.EnrollCourse(courseEnrollModel , userid);
+            var courselist = await _categoryService.GetCategoryById(CategoryId);
+            var response = BaseResponseModel<CategoryViewModel>.OkDataResponse(courselist, "Load successfully");
+            return new OkObjectResult(response);
+
+        }
+        [HttpPost("EnrollCourse")]
+        public async Task<IActionResult> EnrollCourse([FromBody] CourseEnrollModel courseEnrollModel)
+        {
+            await _courseProgressService.EnrollCourse(courseEnrollModel);
             var response = BaseResponseModel<string>.OkMessageResponseModel("Enroll Successfull");
             return new OkObjectResult(response);
         }
@@ -67,5 +84,23 @@ namespace SELF_RA.Controllers
             var response = BaseResponseModel<List<CourseProgessViewModel>>.OkDataResponse(courseprogressList, "Load successfully");
             return new OkObjectResult(response);
         }
+
+        [HttpPost("MarkLessonCompleted")]
+        public async Task<IActionResult> MarkLessonCompleted([FromQuery] string userid, string lessonid)
+        {
+            await _courseProgressService.MarkLessonComplete(userid, lessonid);
+            var response = BaseResponseModel<string>.OkMessageResponseModel("update successfully");
+            return new OkObjectResult(response);
+        }
+        [HttpPut("UpdateProgress")]
+        public async Task<IActionResult> UpdateProgress([FromQuery] string userid, string courseid)
+        {
+
+            await _courseProgressService.CalculateProgress(userid, courseid);
+            var response = BaseResponseModel<string>.OkMessageResponseModel("update successfully");
+            return new OkObjectResult(response);
+        }
+
+
     }
 }

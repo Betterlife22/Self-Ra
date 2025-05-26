@@ -21,10 +21,10 @@ namespace Selfra_Services.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task CreateCategory(CategoryModifyModel model, string userid)
+        public async Task CreateCategory(CategoryModifyModel model)
         {
             var category = _mapper.Map<Category>(model);
-            category.CreatorId = Guid.Parse(userid);
+            category.CreatorId = Guid.Parse(model.CreatorId);
             await _unitOfWork.GetRepository<Category>().AddAsync(category);
             await _unitOfWork.SaveAsync();
         }
