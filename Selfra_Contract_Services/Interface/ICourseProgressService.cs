@@ -14,7 +14,7 @@ namespace Selfra_Contract_Services.Interface
         Task EnrollCourse(CourseEnrollModel courseEnrollModel);
 
         //Task<List<LessonProgressViewModel>> GetLessonProgressInCourse(string courseid, string userid);
-        Task StartLesson(LessonStartModel lessonStartModel, string userid);
+        Task StartLesson(LessonStartModel lessonStartModel);
         Task CalculateProgress(string userid, string courseid);
 
         Task MarkLessonComplete(string userid, string lessonid);

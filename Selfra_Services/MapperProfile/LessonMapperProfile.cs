@@ -16,7 +16,8 @@ namespace Selfra_Services.MapperProfile
         {
             CreateMap<Lesson, LessonViewModel>().ReverseMap();
             CreateMap<Lesson, LessonModifyModel>().ReverseMap();
-            CreateMap<UserLessonProgress, LessonProgressViewModel>().ReverseMap();
+            CreateMap<UserLessonProgress, LessonProgressViewModel>().ForMember(dest => dest.LessonName,
+            opt => opt.MapFrom(src => src.Lesson != null ? src.Lesson.Title : "Unknown")).ReverseMap();
             CreateMap<UserLessonProgress, LessonStartModel>().ReverseMap();
 
         }

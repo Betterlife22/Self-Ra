@@ -66,9 +66,26 @@ namespace Selfra_Services.Service
 
         public async Task<List<CourseProgessViewModel>> GetAllUserCourseProgessAsync(string userid)
         {
-            var courseList = await _unitOfWork.GetRepository<UserCourseProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userid);
-            var result = _mapper.Map<List<CourseProgessViewModel>>(courseList);
-            return result;
+            var courseList = await _unitOfWork.GetRepository<UserCourseProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userid, includeProperties:"Course");
+            var lessonlist = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userid, includeProperties: "Lesson");
+            var courseViewModels = courseList.Select(c => new CourseProgessViewModel
+            {
+                CourseName = c.Course?.Title ?? "Unknown",
+                ProgressPercentage = c.ProgressPercentage,
+                IsCompleted = c.IsCompleted,
+                CompletedAt = c.CompletedAt,
+                Lessons = lessonlist
+
+                .Where(l => l.Lesson != null && l.Lesson.CourseId == c.CourseId)
+                .Select(l => new LessonProgressViewModel
+                {
+                    LessonName = l.Lesson?.Title ?? "Unknown",
+                    IsCompleted = l.IsCompleted
+                })
+            .ToList()
+            }).ToList();
+            //var result = _mapper.Map<List<CourseProgessViewModel>>(courseList);
+            return courseViewModels;
 
         }
 
@@ -78,8 +95,22 @@ namespace Selfra_Services.Service
         {
             var course = await _unitOfWork.GetRepository<UserCourseProgress>().GetByPropertyAsync(uc => uc.UserId.ToString() == userid
             && uc.CourseId == courseid);
-            var result = _mapper.Map<CourseProgessViewModel>(course);
-            return result;
+            var lessonList = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(ulp => ulp.UserId.ToString() == userid
+            && ulp.Lesson != null && ulp.Lesson.CourseId == courseid);
+            var courseViewModel = new CourseProgessViewModel
+            {
+                CourseName = course?.Course?.Title ?? "Unknown",
+                ProgressPercentage = course?.ProgressPercentage ?? 0,
+                IsCompleted = course?.IsCompleted ?? false,
+                CompletedAt = course?.CompletedAt,
+                Lessons = lessonList.Select(l => new LessonProgressViewModel
+                {
+                    LessonName = l.Lesson?.Title ?? "Unknown",
+                    IsCompleted = l.IsCompleted
+                }).ToList()
+            };
+            //var result = _mapper.Map<CourseProgessViewModel>(course);
+            return courseViewModel;
         }
 
         public async Task MarkLessonComplete(string userid, string lessonid)
@@ -96,10 +127,10 @@ namespace Selfra_Services.Service
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task StartLesson(LessonStartModel lessonStartModel, string userid)
+        public async Task StartLesson(LessonStartModel lessonStartModel)
         {
             var lesson = _mapper.Map<UserLessonProgress>(lessonStartModel);
-            lesson.UserId = Guid.Parse(userid);
+            lesson.UserId = Guid.Parse(lessonStartModel.Userid);
             await _unitOfWork.GetRepository<UserLessonProgress>().AddAsync(lesson);
             await _unitOfWork.SaveAsync();
         }

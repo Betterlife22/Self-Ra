@@ -10,5 +10,6 @@ namespace Selfra_Entity.Model
 
         public virtual ApplicationUser? User { get; set; }
         public virtual Lesson? Lesson { get; set; }
+
     }
 }

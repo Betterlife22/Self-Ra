@@ -24,7 +24,7 @@ namespace Selfra_Services.MapperProfile
 
             CreateMap<UserCourseProgress, CourseProgessViewModel>().ForMember(dest => dest.CourseName,
                opt => opt.MapFrom(src => src.Course != null ? src.Course.Title : "Unknown"))
-                .ReverseMap();
+            .ReverseMap();
 
             CreateMap<UserCourseProgress, CourseEnrollModel>().ReverseMap();
 

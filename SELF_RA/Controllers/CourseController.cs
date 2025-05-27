@@ -84,6 +84,13 @@ namespace SELF_RA.Controllers
             var response = BaseResponseModel<List<CourseProgessViewModel>>.OkDataResponse(courseprogressList, "Load successfully");
             return new OkObjectResult(response);
         }
+        [HttpPost("StartLesson")]
+        public async Task <IActionResult> StartLesson([FromBody] LessonStartModel model)
+        {
+            await _courseProgressService.StartLesson(model);
+            var response = BaseResponseModel<string>.OkMessageResponseModel("Start successfully");
+            return new OkObjectResult(response);
+        }
 
         [HttpPost("MarkLessonCompleted")]
         public async Task<IActionResult> MarkLessonCompleted([FromQuery] string userid, string lessonid)
