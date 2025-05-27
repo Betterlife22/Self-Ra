@@ -7,6 +7,8 @@ using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.CategoryModel;
 using Selfra_ModelViews.Model.CourseModel;
 using Selfra_ModelViews.Model.ProgressModel;
+using Selfra_Services.Infrastructure;
+using System.Security.Claims;
 
 namespace SELF_RA.Controllers
 {
@@ -17,6 +19,7 @@ namespace SELF_RA.Controllers
         private readonly ICourseService _courseService;
         private readonly ICourseProgressService _courseProgressService;
         private readonly ICategoryService _categoryService;
+
         public CourseController(ICourseService courseService, ICourseProgressService courseProgressService, ICategoryService categoryService)
         {
             _courseService = courseService;
@@ -71,16 +74,21 @@ namespace SELF_RA.Controllers
             return new OkObjectResult(response);
         }
         [HttpGet("GetUserCourseProgress")]
-        public async Task<IActionResult> GetUserCourseProgress([FromQuery] string userid, string courseid)
+        public async Task<IActionResult> GetUserCourseProgress([FromQuery]  string courseid)
         {
-            var courseprogress = await _courseProgressService.GetUserCourseProgessAsync(userid, courseid);
+            var courseprogress = await _courseProgressService.GetUserCourseProgessAsync(courseid);
             var response = BaseResponseModel<CourseProgessViewModel>.OkDataResponse(courseprogress, "Load successfully");
             return new OkObjectResult(response);
         }
         [HttpGet("GetAllUserCourseProgress")]
-        public async Task<IActionResult> GetAllUserCourseProgress([FromQuery] string userid)
+        public async Task<IActionResult> GetAllUserCourseProgress()
         {
-            var courseprogressList = await _courseProgressService.GetAllUserCourseProgessAsync(userid);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            //var email = User.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+
+            var courseprogressList = await _courseProgressService.GetAllUserCourseProgessAsync();
             var response = BaseResponseModel<List<CourseProgessViewModel>>.OkDataResponse(courseprogressList, "Load successfully");
             return new OkObjectResult(response);
         }
@@ -93,17 +101,17 @@ namespace SELF_RA.Controllers
         }
 
         [HttpPost("MarkLessonCompleted")]
-        public async Task<IActionResult> MarkLessonCompleted([FromQuery] string userid, string lessonid)
+        public async Task<IActionResult> MarkLessonCompleted([FromQuery]string lessonid)
         {
-            await _courseProgressService.MarkLessonComplete(userid, lessonid);
+            await _courseProgressService.MarkLessonComplete(lessonid);
             var response = BaseResponseModel<string>.OkMessageResponseModel("update successfully");
             return new OkObjectResult(response);
         }
         [HttpPut("UpdateProgress")]
-        public async Task<IActionResult> UpdateProgress([FromQuery] string userid, string courseid)
+        public async Task<IActionResult> UpdateProgress([FromQuery] string courseid)
         {
 
-            await _courseProgressService.CalculateProgress(userid, courseid);
+            await _courseProgressService.CalculateProgress(courseid);
             var response = BaseResponseModel<string>.OkMessageResponseModel("update successfully");
             return new OkObjectResult(response);
         }

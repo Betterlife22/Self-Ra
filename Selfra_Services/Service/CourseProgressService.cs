@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Selfra_Contract_Services.Interface;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.ProgressModel;
+using Selfra_Services.Infrastructure;
 using Selft.Contract.Repositories.Interface;
 using System;
 using System.Collections.Generic;
@@ -16,14 +18,19 @@ namespace Selfra_Services.Service
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public CourseProgressService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public CourseProgressService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task CalculateProgress(string userid, string courseid)
+        public async Task CalculateProgress(string courseid)
         {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
             //get total lesson in course
             var lesson = await _unitOfWork.GetRepository<Lesson>().GetAllByPropertyAsync(l=>l.CourseId == courseid);
             int lessoncount = lesson.Count();
@@ -31,7 +38,7 @@ namespace Selfra_Services.Service
 
             //get completed lesson 
             var completedLesson = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(
-                ul => ul.UserId == Guid.Parse(userid)
+                ul => ul.UserId == Guid.Parse(userId)
                 && ul.IsCompleted
                 && ul.Lesson != null
                 && ul.Lesson.CourseId == courseid,
@@ -41,7 +48,7 @@ namespace Selfra_Services.Service
             float progressPercentage = (float)completedcount / lessoncount * 100;
 
             var usercourseProgress = await _unitOfWork.GetRepository<UserCourseProgress>().GetByPropertyAsync(
-                uc => uc.UserId == Guid.Parse(userid)
+                uc => uc.UserId == Guid.Parse(userId)
                 && uc.CourseId == courseid
                 );
             if(usercourseProgress == null) return;
@@ -57,17 +64,21 @@ namespace Selfra_Services.Service
 
         public async Task EnrollCourse(CourseEnrollModel courseEnrollModel)
         {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
             var courseProgress = _mapper.Map<UserCourseProgress>(courseEnrollModel);
-            courseProgress.UserId = Guid.Parse(courseEnrollModel.UserId);
+            courseProgress.UserId = Guid.Parse(userId);
             await _unitOfWork.GetRepository<UserCourseProgress>().AddAsync(courseProgress);
             await _unitOfWork.SaveAsync();
 
         }
 
-        public async Task<List<CourseProgessViewModel>> GetAllUserCourseProgessAsync(string userid)
+        public async Task<List<CourseProgessViewModel>> GetAllUserCourseProgessAsync()
         {
-            var courseList = await _unitOfWork.GetRepository<UserCourseProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userid, includeProperties:"Course");
-            var lessonlist = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userid, includeProperties: "Lesson");
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
+            var courseList = await _unitOfWork.GetRepository<UserCourseProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userId, includeProperties:"Course");
+            var lessonlist = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userId, includeProperties: "Lesson");
             var courseViewModels = courseList.Select(c => new CourseProgessViewModel
             {
                 CourseName = c.Course?.Title ?? "Unknown",
@@ -91,11 +102,13 @@ namespace Selfra_Services.Service
 
        
 
-        public async Task<CourseProgessViewModel> GetUserCourseProgessAsync(string userid, string courseid)
+        public async Task<CourseProgessViewModel> GetUserCourseProgessAsync(string courseid)
         {
-            var course = await _unitOfWork.GetRepository<UserCourseProgress>().GetByPropertyAsync(uc => uc.UserId.ToString() == userid
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
+            var course = await _unitOfWork.GetRepository<UserCourseProgress>().GetByPropertyAsync(uc => uc.UserId.ToString() == userId
             && uc.CourseId == courseid);
-            var lessonList = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(ulp => ulp.UserId.ToString() == userid
+            var lessonList = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(ulp => ulp.UserId.ToString() == userId
             && ulp.Lesson != null && ulp.Lesson.CourseId == courseid);
             var courseViewModel = new CourseProgessViewModel
             {
@@ -113,11 +126,13 @@ namespace Selfra_Services.Service
             return courseViewModel;
         }
 
-        public async Task MarkLessonComplete(string userid, string lessonid)
+        public async Task MarkLessonComplete(string lessonid)
         {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
             var userlessonProgress = new UserLessonProgress()
             {
-                UserId = Guid.Parse(userid),
+                UserId = Guid.Parse(userId),
                 LessonId = lessonid,
                 IsCompleted = true,
                 LastUpdatedTime = DateTime.UtcNow
@@ -129,8 +144,10 @@ namespace Selfra_Services.Service
 
         public async Task StartLesson(LessonStartModel lessonStartModel)
         {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
             var lesson = _mapper.Map<UserLessonProgress>(lessonStartModel);
-            lesson.UserId = Guid.Parse(lessonStartModel.Userid);
+            lesson.UserId = Guid.Parse(userId);
             await _unitOfWork.GetRepository<UserLessonProgress>().AddAsync(lesson);
             await _unitOfWork.SaveAsync();
         }

@@ -35,6 +35,11 @@ namespace Selfra_Services.MapperProfile
             CreateMap<Quiz,QuizzModifyModel>().ReverseMap();
             CreateMap<QuizQuestion,QuestionModifyModel>().ReverseMap();
             CreateMap<QuizAnswer,AnswerModifyModel>().ReverseMap();
+
+            CreateMap<Quiz, QuizViewModel>().ReverseMap();
+            CreateMap<QuizQuestion, QuestionViewModel>().ReverseMap();
+            CreateMap<QuizAnswer, AnswerViewModel>().ReverseMap();
+
         }
     }
 }

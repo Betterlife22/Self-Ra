@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Selfra_ModelViews.Model.QuizzModel
 {
-    public class QuizzSubmissionModel
+    public class QuestionViewModel
     {
-        public string QuizId { get; set; }
-        public List<SubmittedAnswerModel> SubmittedAnswers { get; set; }
+        public string? QuestionText { get; set; }
+
     }
 }
