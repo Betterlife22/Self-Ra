@@ -12,5 +12,6 @@ namespace Selfra_ModelViews.Model.ProgressModel
         public float ProgressPercentage { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime? CompletedAt { get; set; }
+        public List<LessonProgressViewModel> Lessons { get; set; } 
     }
 }

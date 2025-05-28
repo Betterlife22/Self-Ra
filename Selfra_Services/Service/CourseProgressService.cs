@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Selfra_Contract_Services.Interface;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.ProgressModel;
+using Selfra_Services.Infrastructure;
 using Selft.Contract.Repositories.Interface;
 using System;
 using System.Collections.Generic;
@@ -16,44 +18,136 @@ namespace Selfra_Services.Service
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public CourseProgressService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public CourseProgressService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task EnrollCourse(CourseEnrollModel courseEnrollModel, string userid)
+        public async Task CalculateProgress(string courseid)
         {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
+            //get total lesson in course
+            var lesson = await _unitOfWork.GetRepository<Lesson>().GetAllByPropertyAsync(l=>l.CourseId == courseid);
+            int lessoncount = lesson.Count();
+            if (lessoncount == 0) return;
+
+            //get completed lesson 
+            var completedLesson = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(
+                ul => ul.UserId == Guid.Parse(userId)
+                && ul.IsCompleted
+                && ul.Lesson != null
+                && ul.Lesson.CourseId == courseid,
+                includeProperties: "Lesson");
+
+            var completedcount = completedLesson.Count();
+            float progressPercentage = (float)completedcount / lessoncount * 100;
+
+            var usercourseProgress = await _unitOfWork.GetRepository<UserCourseProgress>().GetByPropertyAsync(
+                uc => uc.UserId == Guid.Parse(userId)
+                && uc.CourseId == courseid
+                );
+            if(usercourseProgress == null) return;
+            usercourseProgress.ProgressPercentage = progressPercentage;
+            if(progressPercentage == 100)
+            {
+                usercourseProgress.IsCompleted = true;
+                usercourseProgress.CompletedAt = DateTime.Now;
+            }
+
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task EnrollCourse(CourseEnrollModel courseEnrollModel)
+        {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
             var courseProgress = _mapper.Map<UserCourseProgress>(courseEnrollModel);
-            courseProgress.UserId = Guid.Parse(userid);
+            courseProgress.UserId = Guid.Parse(userId);
             await _unitOfWork.GetRepository<UserCourseProgress>().AddAsync(courseProgress);
             await _unitOfWork.SaveAsync();
 
         }
 
-        public async Task<List<CourseProgessViewModel>> GetAllUserCourseProgessAsync(string userid)
+        public async Task<List<CourseProgessViewModel>> GetAllUserCourseProgessAsync()
         {
-            var courseList = await _unitOfWork.GetRepository<UserCourseProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userid);
-            var result = _mapper.Map<List<CourseProgessViewModel>>(courseList);
-            return result;
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
+            var courseList = await _unitOfWork.GetRepository<UserCourseProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userId, includeProperties:"Course");
+            var lessonlist = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userId, includeProperties: "Lesson");
+            var courseViewModels = courseList.Select(c => new CourseProgessViewModel
+            {
+                CourseName = c.Course?.Title ?? "Unknown",
+                ProgressPercentage = c.ProgressPercentage,
+                IsCompleted = c.IsCompleted,
+                CompletedAt = c.CompletedAt,
+                Lessons = lessonlist
+
+                .Where(l => l.Lesson != null && l.Lesson.CourseId == c.CourseId)
+                .Select(l => new LessonProgressViewModel
+                {
+                    LessonName = l.Lesson?.Title ?? "Unknown",
+                    IsCompleted = l.IsCompleted
+                })
+            .ToList()
+            }).ToList();
+            //var result = _mapper.Map<List<CourseProgessViewModel>>(courseList);
+            return courseViewModels;
 
         }
 
        
 
-        public async Task<CourseProgessViewModel> GetUserCourseProgessAsync(string userid, string courseid)
+        public async Task<CourseProgessViewModel> GetUserCourseProgessAsync(string courseid)
         {
-            var course = await _unitOfWork.GetRepository<UserCourseProgress>().GetByPropertyAsync(uc => uc.UserId.ToString() == userid
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
+            var course = await _unitOfWork.GetRepository<UserCourseProgress>().GetByPropertyAsync(uc => uc.UserId.ToString() == userId
             && uc.CourseId == courseid);
-            var result = _mapper.Map<CourseProgessViewModel>(course);
-            return result;
+            var lessonList = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(ulp => ulp.UserId.ToString() == userId
+            && ulp.Lesson != null && ulp.Lesson.CourseId == courseid);
+            var courseViewModel = new CourseProgessViewModel
+            {
+                CourseName = course?.Course?.Title ?? "Unknown",
+                ProgressPercentage = course?.ProgressPercentage ?? 0,
+                IsCompleted = course?.IsCompleted ?? false,
+                CompletedAt = course?.CompletedAt,
+                Lessons = lessonList.Select(l => new LessonProgressViewModel
+                {
+                    LessonName = l.Lesson?.Title ?? "Unknown",
+                    IsCompleted = l.IsCompleted
+                }).ToList()
+            };
+            //var result = _mapper.Map<CourseProgessViewModel>(course);
+            return courseViewModel;
         }
-       
 
-        public async Task StartLesson(LessonStartModel lessonStartModel, string userid)
+        public async Task MarkLessonComplete(string lessonid)
         {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
+            var userlessonProgress = new UserLessonProgress()
+            {
+                UserId = Guid.Parse(userId),
+                LessonId = lessonid,
+                IsCompleted = true,
+                LastUpdatedTime = DateTime.UtcNow
+
+            };
+            await _unitOfWork.GetRepository<UserLessonProgress>().AddAsync(userlessonProgress);
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task StartLesson(LessonStartModel lessonStartModel)
+        {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+
             var lesson = _mapper.Map<UserLessonProgress>(lessonStartModel);
-            lesson.UserId = Guid.Parse(userid);
+            lesson.UserId = Guid.Parse(userId);
             await _unitOfWork.GetRepository<UserLessonProgress>().AddAsync(lesson);
             await _unitOfWork.SaveAsync();
         }

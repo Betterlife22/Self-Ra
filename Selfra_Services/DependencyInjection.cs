@@ -39,7 +39,6 @@ namespace Selfra_Services
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IQuizzService, QuizzService>();
             services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<IAuthService, AuthService>();   
         }
     }
 }

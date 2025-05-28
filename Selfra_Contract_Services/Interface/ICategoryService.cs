@@ -11,7 +11,7 @@ namespace Selfra_Contract_Services.Interface
     {
         Task<List<CategoryViewModel>> GetAllCategory();
         Task<CategoryViewModel> GetCategoryById(string id);
-        Task CreateCategory (CategoryModifyModel model, string userid);
+        Task CreateCategory (CategoryModifyModel model);
 
 
     }

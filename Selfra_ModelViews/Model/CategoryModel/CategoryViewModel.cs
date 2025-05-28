@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Selfra_Entity.Model;
+using Selfra_ModelViews.Model.CourseModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +14,7 @@ namespace Selfra_ModelViews.Model.CategoryModel
         public string? Slug { get; set; }
         public string? Description { get; set; }
         public string? CreatorName { get; set; }
+        public virtual List<CourseViewModel>? Courses { get; set; }
+
     }
 }

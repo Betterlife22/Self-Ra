@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Selfra_Entity.Model;
+using Selfra_ModelViews.Model.LessonModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +20,7 @@ namespace Selfra_ModelViews.Model.CourseModel
         public string? Level { get; set; }
         public int Duration { get; set; }
         public bool IsPublished { get; set; }
+        public  List<LessonViewModel>? Lessons { get; set; }
+
     }
 }

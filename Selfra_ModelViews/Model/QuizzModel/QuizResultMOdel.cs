@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Selfra_ModelViews.Model.QuizzModel
 {
-    public class QuizzSubmissionModel
+    public class QuizResultModel
     {
-        public string QuizId { get; set; }
-        public List<SubmittedAnswerModel> SubmittedAnswers { get; set; }
+        public string? QuizName { get; set; }
+        public string? UserName { get; set; }
+        public int Score { get; set; }
     }
 }
