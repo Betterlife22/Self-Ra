@@ -69,6 +69,8 @@ namespace SELF_RA.Controllers
         [HttpPost("EnrollCourse")]
         public async Task<IActionResult> EnrollCourse([FromBody] CourseEnrollModel courseEnrollModel)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             await _courseProgressService.EnrollCourse(courseEnrollModel);
             var response = BaseResponseModel<string>.OkMessageResponseModel("Enroll Successfull");
             return new OkObjectResult(response);
@@ -76,6 +78,8 @@ namespace SELF_RA.Controllers
         [HttpGet("GetUserCourseProgress")]
         public async Task<IActionResult> GetUserCourseProgress([FromQuery]  string courseid)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             var courseprogress = await _courseProgressService.GetUserCourseProgessAsync(courseid);
             var response = BaseResponseModel<CourseProgessViewModel>.OkDataResponse(courseprogress, "Load successfully");
             return new OkObjectResult(response);
@@ -95,6 +99,8 @@ namespace SELF_RA.Controllers
         [HttpPost("StartLesson")]
         public async Task <IActionResult> StartLesson([FromBody] LessonStartModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             await _courseProgressService.StartLesson(model);
             var response = BaseResponseModel<string>.OkMessageResponseModel("Start successfully");
             return new OkObjectResult(response);
@@ -103,6 +109,8 @@ namespace SELF_RA.Controllers
         [HttpPost("MarkLessonCompleted")]
         public async Task<IActionResult> MarkLessonCompleted([FromQuery]string lessonid)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             await _courseProgressService.MarkLessonComplete(lessonid);
             var response = BaseResponseModel<string>.OkMessageResponseModel("update successfully");
             return new OkObjectResult(response);
@@ -110,7 +118,8 @@ namespace SELF_RA.Controllers
         [HttpPut("UpdateProgress")]
         public async Task<IActionResult> UpdateProgress([FromQuery] string courseid)
         {
-
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             await _courseProgressService.CalculateProgress(courseid);
             var response = BaseResponseModel<string>.OkMessageResponseModel("update successfully");
             return new OkObjectResult(response);

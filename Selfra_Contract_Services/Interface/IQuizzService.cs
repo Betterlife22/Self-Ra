@@ -11,6 +11,7 @@ namespace Selfra_Contract_Services.Interface
     {
         Task Createquiz(QuizzModifyModel quizzModifyModel);
         Task TakeQuiz(QuizzSubmissionModel quizzSubmissionModel);
-        Task<List<QuizViewModel>> ListQuiz(string courseid);
+        Task<QuizViewModel> ListQuiz(string courseid);
+        Task<QuizResultModel> GetUserQuizResult (string quizid);
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Selfra_ModelViews.Model.QuizzModel
 {
-    public class QuizResultMOdel
+    public class QuizResultModel
     {
         public string? QuizName { get; set; }
         public string? UserName { get; set; }

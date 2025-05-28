@@ -39,6 +39,11 @@ namespace Selfra_Services.MapperProfile
             CreateMap<Quiz, QuizViewModel>().ReverseMap();
             CreateMap<QuizQuestion, QuestionViewModel>().ReverseMap();
             CreateMap<QuizAnswer, AnswerViewModel>().ReverseMap();
+            CreateMap<QuizResult, QuizResultModel>().ForMember(dest => dest.QuizName,
+               opt => opt.MapFrom(src => src.Quiz != null ? src.Quiz.Title : "Unknown")).
+               ForMember(dest => dest.UserName,
+               opt => opt.MapFrom(src => src.User != null ? src.User.UserName : "Unknown"))
+               .ReverseMap();
 
         }
     }

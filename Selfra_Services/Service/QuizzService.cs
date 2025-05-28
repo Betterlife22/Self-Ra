@@ -43,11 +43,20 @@ namespace Selfra_Services.Service
 
         }
 
-        public async Task<List<QuizViewModel>> ListQuiz(string courseid)
+        public async Task<QuizResultModel> GetUserQuizResult(string quizid)
+        {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+            var quizresult = await _unitOfWork.GetRepository<QuizResult>().GetByPropertyAsync(
+                qr => qr.QuizId == quizid && qr.UserId == Guid.Parse(userId));
+            var result = _mapper.Map<QuizResultModel>(quizresult);
+            return result;
+        }
+
+        public async Task<QuizViewModel> ListQuiz(string courseid)
         {
 
-            var quizzlist = await _unitOfWork.GetRepository<Quiz>().GetByPropertyAsync(q => q.CourseId == courseid);
-            var result = _mapper.Map<List<QuizViewModel>>(quizzlist);
+            var quizzlist = await _unitOfWork.GetRepository<Quiz>().GetByPropertyAsync(q => q.CourseId == courseid,includeProperties: "Questions,Questions.Answers");
+            var result = _mapper.Map<QuizViewModel>(quizzlist);
             return result;
         }
 
