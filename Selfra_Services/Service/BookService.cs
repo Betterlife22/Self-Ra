@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.VisualBasic;
 using Selfra_Contract_Services.Interface;
+using Selfra_Core.Base;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.BookModel;
+using Selfra_ModelViews.Model.CourseModel;
 using Selfra_Services.Infrastructure;
 using Selft.Contract.Repositories.Interface;
 using System;
@@ -36,23 +39,25 @@ namespace Selfra_Services.Service
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<List<BookViewModel>> GetAllBooks()
+        public async Task<PaginatedList<BookViewModel>> GetAllBooks(int index, int pageSize)
         {
-            var bookList = await _unitOfWork.GetRepository<Book>().GetAllAsync();
-            var result = _mapper.Map<List<BookViewModel>>(bookList);
-            return result;
+            var bookList =  _unitOfWork.GetRepository<Book>().GetQueryableByProperty();
+            var QueryBook = bookList.ProjectTo<BookViewModel>(_mapper.ConfigurationProvider);
+            PaginatedList<BookViewModel> paginateList = await _unitOfWork.GetRepository<BookViewModel>().GetPagingAsync(QueryBook.AsQueryable(), index, pageSize);
+            return paginateList;
         }
 
-        public async Task<List<BookProgressViewModel>> GetAllUserBookProgress()
+        public async Task<PaginatedList<BookProgressViewModel>> GetAllUserBookProgress(int index, int pageSize)
         {
 
             var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
-            var bookprogress = await _unitOfWork.GetRepository<ReadingProgress>().GetAllByPropertyAsync(
+            var bookprogress = _unitOfWork.GetRepository<ReadingProgress>().GetQueryableByProperty(
                 b => b.UserId == Guid.Parse(userId),
                 includeProperties: "Book"
                 );
-            var result = _mapper.Map<List<BookProgressViewModel>>(bookprogress);
-            return result;
+            var QueryBook = bookprogress.ProjectTo<BookProgressViewModel>(_mapper.ConfigurationProvider);
+            PaginatedList<BookProgressViewModel> paginatedList = await _unitOfWork.GetRepository<BookProgressViewModel>().GetPagingAsync(QueryBook.AsQueryable(), index, pageSize);
+            return paginatedList;
         }
 
         public async Task<BookViewModel> GetBook(string id)
@@ -94,6 +99,17 @@ namespace Selfra_Services.Service
             bookprogress.BookId = bookid;
             await _unitOfWork.GetRepository<ReadingProgress>().AddAsync(bookprogress);
             await _unitOfWork.SaveAsync();
+        }
+
+        public async Task UpdateBookProgress(BookProgessModel bookProgessModel,string bookid)
+        {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+            var existedProgress = await _unitOfWork.GetRepository<ReadingProgress>().GetByPropertyAsync(
+                b => b.UserId == Guid.Parse(userId));
+            _mapper.Map(bookProgessModel, existedProgress);
+            await _unitOfWork.GetRepository<ReadingProgress>().UpdateAsync(existedProgress);
+            await _unitOfWork.SaveAsync();
+            
         }
     }
 }

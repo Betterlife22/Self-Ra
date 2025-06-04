@@ -1,4 +1,5 @@
-﻿using Selfra_ModelViews.Model.CourseModel;
+﻿using Selfra_Core.Base;
+using Selfra_ModelViews.Model.CourseModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Selfra_Contract_Services.Interface
     {
         public Task CreateCourse(CourseModifyModel courseModifyModel);
         public Task UpdateCourse(string courseid,CourseModifyModel courseModifyModel);
-        public Task<List<CourseViewModel>> GetAllCourse();
+        public Task<PaginatedList<CourseViewModel>> GetAllCourse(int index, int pageSize);
         public Task<CourseViewModel> GetCourseById(string id);
     }
 }

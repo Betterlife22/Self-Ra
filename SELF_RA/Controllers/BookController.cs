@@ -65,5 +65,14 @@ namespace SELF_RA.Controllers
             return new OkObjectResult(response);
 
         }
+        [HttpPut("UpdateProgress")]
+        public async Task<IActionResult> UpdateProgress([FromBody] BookProgessModel bookProgessModel, string bookid)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            await _bookService.UpdateBookProgress(bookProgessModel, bookid);
+            var response = BaseResponseModel<string>.OkMessageResponseModel("Update successfully");
+            return new OkObjectResult(response);
+        }
     }
 }

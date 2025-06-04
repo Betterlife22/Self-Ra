@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Selfra_Contract_Services.Interface;
+using Selfra_Core.Base;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.CourseModel;
 using Selfra_ModelViews.Model.LessonModel;
@@ -30,11 +32,12 @@ namespace Selfra_Services.Service
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<List<LessonViewModel>> GetAllLessonInCourse(string courseid)
+        public async Task<PaginatedList<LessonViewModel>> GetAllLessonInCourse(string courseid, int index, int pageSizes)
         {
-            var LessonList = await _unitOfWork.GetRepository<Lesson>().GetAllByPropertyAsync(l=>l.CourseId == courseid);
-            var result = _mapper.Map<List<LessonViewModel>>(LessonList);
-            return result;
+            var LessonList = _unitOfWork.GetRepository<Lesson>().GetQueryableByProperty(l=>l.CourseId == courseid);
+            var Querycourse = LessonList.ProjectTo<LessonViewModel>(_mapper.ConfigurationProvider);
+            PaginatedList<LessonViewModel> paginateList = await _unitOfWork.GetRepository<LessonViewModel>().GetPagingAsync(Querycourse.AsQueryable(), index, pageSizes); 
+            return paginateList;
         }
 
         public async Task<LessonViewModel> GetLessonById(string lessonid)

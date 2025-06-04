@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Selfra_Contract_Services.Interface;
+using Selfra_Core.Base;
 using Selfra_Entity.Model;
+using Selfra_ModelViews.Model.CourseModel;
 using Selfra_ModelViews.Model.ProgressModel;
 using Selfra_Services.Infrastructure;
 using Selft.Contract.Repositories.Interface;
@@ -73,15 +76,15 @@ namespace Selfra_Services.Service
 
         }
 
-        public async Task<List<CourseProgessViewModel>> GetAllUserCourseProgessAsync()
+        public async Task<PaginatedList<CourseProgessViewModel>> GetAllUserCourseProgessAsync(int index, int pageSize)
         {
             var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
 
-            var courseList = await _unitOfWork.GetRepository<UserCourseProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userId, includeProperties:"Course");
-            var lessonlist = await _unitOfWork.GetRepository<UserLessonProgress>().GetAllByPropertyAsync(uc => uc.UserId.ToString() == userId, includeProperties: "Lesson");
+            var courseList =  _unitOfWork.GetRepository<UserCourseProgress>().GetQueryableByProperty(uc => uc.UserId.ToString() == userId, includeProperties:"Course");
+            var lessonlist =  _unitOfWork.GetRepository<UserLessonProgress>().GetQueryableByProperty(uc => uc.UserId.ToString() == userId, includeProperties: "Lesson");
             var courseViewModels = courseList.Select(c => new CourseProgessViewModel
             {
-                CourseName = c.Course?.Title ?? "Unknown",
+                CourseName = c.Course.Title ?? "Unknown",
                 ProgressPercentage = c.ProgressPercentage,
                 IsCompleted = c.IsCompleted,
                 CompletedAt = c.CompletedAt,
@@ -90,13 +93,15 @@ namespace Selfra_Services.Service
                 .Where(l => l.Lesson != null && l.Lesson.CourseId == c.CourseId)
                 .Select(l => new LessonProgressViewModel
                 {
-                    LessonName = l.Lesson?.Title ?? "Unknown",
+                    LessonName = l.Lesson.Title ?? "Unknown",
                     IsCompleted = l.IsCompleted
                 })
             .ToList()
-            }).ToList();
+            });
+            // Querycourse = courseViewModels.ProjectTo<CourseProgessViewModel>(_mapper.ConfigurationProvider);
+            PaginatedList<CourseProgessViewModel> paginatedourse = await _unitOfWork.GetRepository<CourseProgessViewModel>().GetPagingAsync(courseViewModels.AsQueryable(), index, pageSize);
             //var result = _mapper.Map<List<CourseProgessViewModel>>(courseList);
-            return courseViewModels;
+            return paginatedourse;
 
         }
 
