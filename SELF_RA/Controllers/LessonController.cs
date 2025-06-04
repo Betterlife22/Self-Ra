@@ -35,9 +35,9 @@ namespace SELF_RA.Controllers
             return new OkObjectResult(response);
         }
         [HttpGet("GetAllLessonInCourse")]
-        public async Task<IActionResult> GetAllLessonInCourse (string courseid)
+        public async Task<IActionResult> GetAllLessonInCourse (string courseid,int index, int pageSize)
         {
-            var lessonlist = await _lessonService.GetAllLessonInCourse(courseid);
+            var lessonlist = await _lessonService.GetAllLessonInCourse(courseid, index, pageSize);
             var response = BaseResponseModel<List<LessonViewModel>>.OkDataResponse(lessonlist, "Load successfully");
             return new OkObjectResult(response);
         }

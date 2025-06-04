@@ -1,4 +1,5 @@
-﻿using Selfra_ModelViews.Model.LessonModel;
+﻿using Selfra_Core.Base;
+using Selfra_ModelViews.Model.LessonModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Selfra_Contract_Services.Interface
     public interface ILessonService
     {
         Task<LessonViewModel> GetLessonById(string lessonid);
-        Task<List<LessonViewModel>> GetAllLessonInCourse(string courseid);
+        Task<PaginatedList<LessonViewModel>> GetAllLessonInCourse(string courseid, int index, int pageSizes);
         Task CreateLesson(LessonModifyModel lessonModifyModel);
     }
 }

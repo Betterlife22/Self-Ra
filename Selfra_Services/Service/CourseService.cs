@@ -1,13 +1,18 @@
 ﻿using AutoMapper;
 using Selfra_Contract_Services.Interface;
+using Selfra_Core.Base;
 using Selfra_Entity.Model;
+using AutoMapper.QueryableExtensions;
+
 using Selfra_ModelViews.Model.CourseModel;
+using Selfra_ModelViews.Model.RoleModel;
 using Selft.Contract.Repositories.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Selfra_Services.Service
 {
@@ -30,11 +35,14 @@ namespace Selfra_Services.Service
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<List<CourseViewModel>> GetAllCourse()
+        public async Task<PaginatedList<CourseViewModel>> GetAllCourse(int index, int pageSize)
         {
-            var courselist = await _unitOfWork.GetRepository<Course>().GetAllAsync();
-            var result = _mapper.Map<List<CourseViewModel>>(courselist);
-            return result;
+
+            var courselist = _unitOfWork.GetRepository<Course>().GetQueryableByProperty();
+            var Querycourse = courselist.ProjectTo<CourseViewModel>(_mapper.ConfigurationProvider);
+            PaginatedList<CourseViewModel> paginatedourse = await _unitOfWork.GetRepository<CourseViewModel>().GetPagingAsync(Querycourse.AsQueryable(), index, pageSize);
+
+            return paginatedourse;
         }
 
         public async Task<CourseViewModel> GetCourseById(string id)

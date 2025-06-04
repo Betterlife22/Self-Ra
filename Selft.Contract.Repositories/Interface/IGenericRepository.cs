@@ -9,6 +9,7 @@ namespace Selft.Contract.Repositories.Interface
     {
         Task<IEnumerable<T>> GetAllAsync();
         IQueryable<T> Entities { get; }
+        IQueryable<T> GetQueryableByProperty(Expression<Func<T, bool>>? filter = null, string? includeProperties = null);
         Task<T?> GetByIdAsync(object id);
         Task<PaginatedList<T>> GetPagingAsync(IQueryable<T> query, int pageIndex, int pageSize);
         Task AddAsync(T entity);
