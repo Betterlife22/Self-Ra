@@ -41,9 +41,9 @@ namespace SELF_RA.Controllers
             return new OkObjectResult(response);
         }
         [HttpGet("GetAllCourse")]
-        public async Task<IActionResult> GetAllCourse()
+        public async Task<IActionResult> GetAllCourse(int index, int pageSize)
         {
-            var courseList = await _courseService.GetAllCourse();
+            var courseList = await _courseService.GetAllCourse(index,pageSize);
             var response = BaseResponseModel<PaginatedList<CourseViewModel>>.OkDataResponse(courseList, "Load successfull");
             return new OkObjectResult(response);
         }
@@ -85,14 +85,14 @@ namespace SELF_RA.Controllers
             return new OkObjectResult(response);
         }
         [HttpGet("GetAllUserCourseProgress")]
-        public async Task<IActionResult> GetAllUserCourseProgress()
+        public async Task<IActionResult> GetAllUserCourseProgress(int index, int pageSize)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             //var email = User.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
 
-            var courseprogressList = await _courseProgressService.GetAllUserCourseProgessAsync();
+            var courseprogressList = await _courseProgressService.GetAllUserCourseProgessAsync(index,pageSize);
             var response = BaseResponseModel<List<CourseProgessViewModel>>.OkDataResponse(courseprogressList, "Load successfully");
             return new OkObjectResult(response);
         }
