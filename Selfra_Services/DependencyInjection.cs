@@ -40,6 +40,9 @@ namespace Selfra_Services
             services.AddScoped<IQuizzService, QuizzService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IFoodDetailService, FoodDetailService>();
+            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IMentorService, MentorService>();
         }
     }
 }

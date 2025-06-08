@@ -17,10 +17,12 @@ namespace Selfra_Services.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public RoleService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public RoleService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task CreateRole(CreateRoleModel model)
@@ -28,6 +30,8 @@ namespace Selfra_Services.Service
             model.ValidateFields();
             ApplicationRole role = _mapper.Map<ApplicationRole>(model);
             role.NormalizedName = model.Name!.ToUpper();
+            role.CreatedTime = DateTime.UtcNow;
+            
             await _unitOfWork.GetRepository<ApplicationRole>().AddAsync(role);
             await _unitOfWork.SaveAsync();
         }
