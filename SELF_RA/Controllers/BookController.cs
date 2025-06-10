@@ -17,9 +17,9 @@ namespace SELF_RA.Controllers
             _bookService = bookService;
         }
         [HttpGet("GetAllBook")]
-        public async Task<IActionResult> GetAllBook()
+        public async Task<IActionResult> GetAllBook(int index, int pagesize)
         {
-            var booklist = await _bookService.GetAllBooks();
+            var booklist = await _bookService.GetAllBooks(index,pagesize);
             var response = BaseResponseModel<List<BookViewModel>>.OkDataResponse(booklist, "Load successfully");
             return new OkObjectResult(response);
         }
@@ -56,11 +56,11 @@ namespace SELF_RA.Controllers
             return new OkObjectResult(response);
         }
         [HttpGet("GetAllUserBookProgress")]
-        public async Task<IActionResult> GetAllUserBookProgress()
+        public async Task<IActionResult> GetAllUserBookProgress(int index, int pagesize)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var bookprogressList = await _bookService.GetAllUserBookProgress();
+            var bookprogressList = await _bookService.GetAllUserBookProgress(index,pagesize);
             var response = BaseResponseModel<List<BookProgressViewModel>>.OkDataResponse(bookprogressList, "Load Successfully");
             return new OkObjectResult(response);
 
