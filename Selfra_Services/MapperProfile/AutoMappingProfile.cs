@@ -3,6 +3,8 @@
 using AutoMapper;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.FoodDetailModel;
+using Selfra_ModelViews.Model.MentorContact;
+using Selfra_ModelViews.Model.MentorModel;
 using Selfra_ModelViews.Model.PostModel;
 using Selfra_ModelViews.Model.RoleModel;
 using Selfra_ModelViews.Model.UserModel;
@@ -29,6 +31,14 @@ namespace Selfra_Services.MapperProfile
             CreateMap<CreatePostModel, Post>().ReverseMap();
             CreateMap<UpdatePostModel, Post>().ReverseMap();
             CreateMap<ResponsePostModel, Post>().ReverseMap();
+
+            CreateMap<CreateMentorModel, Mentor>().ReverseMap();
+            CreateMap<UpdateMentorModel, Mentor>().ReverseMap();
+            CreateMap<ResponseMentorModel, Mentor>().ReverseMap();
+
+            CreateMap<CreateMentorContact ,MentorContact>().ReverseMap();
+            CreateMap<UpdateMentorContact, MentorContact>().ReverseMap();
+            CreateMap<ResponseMentorContact, MentorContact>().ReverseMap();
         }
     }
 }
