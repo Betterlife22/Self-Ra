@@ -43,6 +43,7 @@ namespace Selfra_Services
             services.AddScoped<IFoodDetailService, FoodDetailService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IMentorService, MentorService>();
+            services.AddScoped<IMessageService, MessageService>();
         }
     }
 }
