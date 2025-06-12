@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
 using Microsoft.AspNetCore.Http;
 using Selfra_Contract_Services.Interface;
 using Selfra_Entity.Model;
@@ -23,6 +24,20 @@ namespace Selfra_Services.Service
             _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+        }
+
+        public async Task AddMembertoGroup(string userId, string conservationId)
+        {
+            var newparticipant = new ConversationParticipant()
+            {
+                ConversationId = conservationId,
+                UserId =Guid.Parse(userId),
+                IsAdmin = false,
+                CreatedTime = DateTime.UtcNow
+
+            };
+            await _unitOfWork.GetRepository<ConversationParticipant>().AddAsync(newparticipant);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task CreateGroupConversation(GroupModel groupmodel)
