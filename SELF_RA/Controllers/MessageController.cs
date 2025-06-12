@@ -34,6 +34,15 @@ namespace SELF_RA.Controllers
             var response = BaseResponseModel<string>.OkMessageResponseModel("Send successfully");
             return new OkObjectResult(response);
         }
+        [HttpPost("AddMembertoGroup")]
+        public async Task<IActionResult> AddMembertoGroup([FromQuery] string userid, string conversationid)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            await _messageService.AddMembertoGroup(userid, conversationid);
+            var response = BaseResponseModel<string>.OkMessageResponseModel("Add successfully");
+            return new OkObjectResult(response);
+        }
         [HttpPost("CreateGroupConversation")]
         public async Task<IActionResult> CreateGroupConversation([FromBody] GroupModel groupModel)
         {

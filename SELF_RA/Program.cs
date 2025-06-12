@@ -2,6 +2,7 @@ using Amazon.S3;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SELF_RA.DI;
+using SELF_RA.Hubs;
 using SELF_RA.Middleware;
 using SELF_RA.Middleware.ChatFPT.API.Middleware;
 using Selfra_Entity;
@@ -27,7 +28,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddSwaggerGen();
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonS3>();
-
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -48,5 +49,6 @@ app.UseAuthorization();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<PermissionMiddleware>();
 app.MapControllers();
+app.MapHub<ChatHub>("/chathub");
 app.UseCors("CorsPolicy");
 app.Run();
