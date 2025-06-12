@@ -8,11 +8,11 @@ namespace SELF_RA.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FoodDetailCotroller : ControllerBase
+    public class FoodDetailController : ControllerBase
     {
         private readonly IFoodDetailService _foodDetailService;
 
-        public FoodDetailCotroller(IFoodDetailService foodDetailService) {
+        public FoodDetailController(IFoodDetailService foodDetailService) {
             _foodDetailService = foodDetailService;
         }
 

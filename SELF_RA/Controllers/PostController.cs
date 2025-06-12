@@ -32,7 +32,7 @@ namespace SELF_RA.Controllers
             return Ok(BaseResponse<ResponsePostModel>.OkDataResponse(list, "Lấy danh sách thành công"));
         }
         [HttpGet("GetPostById")]
-        public async Task<IActionResult> GetFoodDetailById(string id)
+        public async Task<IActionResult> GetPostVoteById(string id)
         {
             ResponsePostModel model = await _postService.GetPostById(id);
             return Ok(BaseResponse<string>.OkMessageResponseModel("Lấy Post thành công"));

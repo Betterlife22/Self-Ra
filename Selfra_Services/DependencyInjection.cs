@@ -45,6 +45,7 @@ namespace Selfra_Services
             services.AddScoped<IMentorService, MentorService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IMentorContactService, MentorContactService>();
+            services.AddScoped<IPostVoteService, PostVoteService>();
         }
     }
 }
