@@ -17,5 +17,6 @@ namespace Selfra_Contract_Services.Interface
         Task<ConversationViewModel> GetConversation (string id);
         Task<List<ConversationViewModel>> GetAllUserConservation();
         Task<List<MessageViewModel>> GetMessages (string conversationid);
+        Task MarkMessageAsRead(string conversationId);
     }
 }

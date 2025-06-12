@@ -8,6 +8,7 @@ namespace Selfra_ModelViews.Model.MessageModel
 {
     public class ConversationViewModel
     {
+        public string Id { get; set; }
         public string? ConversationName { get; set; }
         public bool IsGroup { get; set; }
         public string? LastMessage { get; set; }
