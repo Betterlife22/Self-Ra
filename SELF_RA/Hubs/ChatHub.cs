@@ -7,7 +7,7 @@ using Selfra_Services.Infrastructure;
 
 namespace SELF_RA.Hubs
 {
-    [Authorize]
+   // [Authorize]
     public class ChatHub :Hub
     {
         private readonly IMessageService _messageService;
@@ -31,5 +31,7 @@ namespace SELF_RA.Hubs
             await Clients.All.SendAsync("ReceiveNoti", conversationid);
 
         }
+        public string GetConnectionId() { return Context.ConnectionId; }
+
     }
 }

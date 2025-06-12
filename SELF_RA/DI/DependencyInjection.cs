@@ -59,10 +59,18 @@ namespace SELF_RA.DI
                 options.AddPolicy("CorsPolicy",
                     builder =>
                     {
-                        builder.WithOrigins("*")
-                               .AllowAnyHeader()
-                               .AllowAnyMethod();
+                        builder.WithOrigins("http://127.0.0.1:5501", "https://localhost:7126")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
                     });
+                //options.AddDefaultPolicy(policy =>
+                //{
+                //    policy.WithOrigins("http://localhost:5500", "https://localhost:7126")
+                //          .AllowAnyHeader()
+                //          .AllowAnyMethod()
+                //          .AllowCredentials();
+                //});
             });
         }
         //public static void ConfigCorsSignalR(this IServiceCollection services)
@@ -119,7 +127,7 @@ namespace SELF_RA.DI
                         // If the request is for our hub...
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/hubs/chat")))
+                            (path.StartsWithSegments("/chathub")))
                         {
                             // Read the token out of the query string
                             context.Token = accessToken;
