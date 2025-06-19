@@ -45,21 +45,24 @@ builder.Services.AddSingleton(sp =>
     return settings;
 });
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    }); ;
+    app.UseDeveloperExceptionPage();
 }
+else
+{
+    app.UseDeveloperExceptionPage();
+}
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SelfRaApp API V1");
+    c.RoutePrefix = "swagger";
+});
 
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
-
-app.UseAuthentication();
+ app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<PermissionMiddleware>();
