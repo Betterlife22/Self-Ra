@@ -13,8 +13,10 @@ namespace Selfra_Contract_Services.Interface
         Task StartConversation(string secondUserId);
         Task CreateGroupConversation (GroupModel groupmodel);
         Task SendMessage (SendMessageModel message);
+        Task AddMembertoGroup(string userId, string conservationId);
         Task<ConversationViewModel> GetConversation (string id);
         Task<List<ConversationViewModel>> GetAllUserConservation();
         Task<List<MessageViewModel>> GetMessages (string conversationid);
+        Task MarkMessageAsRead(string conversationId);
     }
 }

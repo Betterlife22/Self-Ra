@@ -63,10 +63,18 @@ namespace SELF_RA.DI
                 options.AddPolicy("CorsPolicy",
                     builder =>
                     {
-                        builder.WithOrigins("*")
-                               .AllowAnyHeader()
-                               .AllowAnyMethod();
+                        builder.WithOrigins("http://127.0.0.1:5501", "https://localhost:7126")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
                     });
+                //options.AddDefaultPolicy(policy =>
+                //{
+                //    policy.WithOrigins("http://localhost:5500", "https://localhost:7126")
+                //          .AllowAnyHeader()
+                //          .AllowAnyMethod()
+                //          .AllowCredentials();
+                //});
             });
         }
 
@@ -116,6 +124,23 @@ namespace SELF_RA.DI
                 };
                 e.SaveToken = true;
                 e.RequireHttpsMetadata = true;
+                e.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/chathub")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
         }
         public static void ConfigSwagger(this IServiceCollection services)
