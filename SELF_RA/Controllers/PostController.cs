@@ -35,7 +35,7 @@ namespace SELF_RA.Controllers
         public async Task<IActionResult> GetPostVoteById(string id)
         {
             ResponsePostModel model = await _postService.GetPostById(id);
-            return Ok(BaseResponse<string>.OkMessageResponseModel("Lấy Post thành công"));
+            return Ok(BaseResponse<ResponsePostModel>.OkDataResponse(model,"Lấy Post thành công"));
         }
 
         [HttpPut("UpdatePost")]

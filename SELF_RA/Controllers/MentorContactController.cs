@@ -35,7 +35,7 @@ namespace SELF_RA.Controllers
         public async Task<IActionResult> GetMentorContactById(string id)
         {
             ResponseMentorContact model = await _mentorContactService.GetMentorContactById(id);
-            return Ok(BaseResponse<string>.OkMessageResponseModel("Lấy MentorContact thành công"));
+            return Ok(BaseResponse<ResponseMentorContact>.OkDataResponse(model, "Lấy MentorContact thành công"));
         }
 
         [HttpPut("UpdateMentorContact")]

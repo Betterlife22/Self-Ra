@@ -33,7 +33,7 @@ namespace SELF_RA.Controllers
         public async Task<IActionResult> GetFoodDetailById(string id)
         {
             ResponseFoodDetailModel model = await _foodDetailService.GetFoodDetailById(id);
-            return Ok(BaseResponse<string>.OkMessageResponseModel("Lấy foodetail thành công"));
+            return Ok(BaseResponse<ResponseFoodDetailModel>.OkDataResponse(model, "Lấy foodetail thành công"));
         }
 
         [HttpPut("UpdateFoodDetail")]
