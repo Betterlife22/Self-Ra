@@ -8,6 +8,7 @@ using Selfra_Entity;
 using Selfra_Entity.Model;
 using Selfra_Repositories.Base;
 using Selfra_Services;
+using Selfra_Services.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddSwaggerGen();
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonS3>();
-
+builder.Services.AddHttpClient<GPTClassificationService>();
 
 var app = builder.Build();
 

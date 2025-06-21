@@ -16,6 +16,7 @@ namespace Selfra_Contract_Services.Interface
 
         Task<ResponsePostModel> GetPostById(string id);
 
+        public Task DeleteAll();
         Task<PaginatedList<ResponsePostModel>> GetAllPost(string? searchName, int index, int PageSize);
     }
 }

@@ -51,5 +51,12 @@ namespace SELF_RA.Controllers
             await _postService.DeletePost(id);
             return Ok(BaseResponse<string>.OkMessageResponseModel("Xóa Post thành công"));
         }
+
+        [HttpDelete("DeleteAll")]
+        public async Task<IActionResult> DeleteAll()
+        {
+            await _postService.DeleteAll();
+            return Ok(BaseResponse<string>.OkMessageResponseModel("Xóa Post thành công"));
+        }
     }
 }
