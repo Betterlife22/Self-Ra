@@ -7,6 +7,7 @@ using Selfra_ModelViews.Model.FoodDetailModel;
 using Selfra_ModelViews.Model.ForumModel;
 using Selfra_ModelViews.Model.MentorContact;
 using Selfra_ModelViews.Model.MentorModel;
+using Selfra_ModelViews.Model.PackageModel;
 using Selfra_ModelViews.Model.PostModel;
 using Selfra_ModelViews.Model.PostVoteModel;
 using Selfra_ModelViews.Model.RoleModel;
@@ -54,6 +55,10 @@ namespace Selfra_Services.MapperProfile
             CreateMap<CreateCommentVoteModel, CommentVote>().ReverseMap();
             CreateMap<UpdateCommentVoteModel, CommentVote>().ReverseMap();
             CreateMap<ResponseCommentVoteModel, CommentVote>().ReverseMap();
+
+            CreateMap<CreatePackageModel, Package>().ReverseMap();
+            CreateMap<UpdatePackageModel, Package>().ReverseMap();
+            CreateMap<ResponsePackageModel, Package>().ReverseMap();
         }
     }
 }
