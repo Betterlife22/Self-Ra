@@ -134,16 +134,11 @@ namespace Selfra_Services.Service
         public async Task MarkLessonComplete(string lessonid)
         {
             var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
-
-            var userlessonProgress = new UserLessonProgress()
-            {
-                UserId = Guid.Parse(userId),
-                LessonId = lessonid,
-                IsCompleted = true,
-                LastUpdatedTime = DateTime.UtcNow
-
-            };
-            await _unitOfWork.GetRepository<UserLessonProgress>().AddAsync(userlessonProgress);
+            var lessonexisted = await _unitOfWork.GetRepository<Lesson>().GetByPropertyAsync(l => l.Id == lessonid);            
+            var userlessonProgress = await _unitOfWork.GetRepository<UserLessonProgress>()
+                .GetByPropertyAsync(l=>l.LessonId == lessonid && l.UserId == Guid.Parse(userId));
+            userlessonProgress.IsCompleted = true;
+            userlessonProgress.LastUpdatedTime = DateTime.UtcNow;
             await _unitOfWork.SaveAsync();
         }
 

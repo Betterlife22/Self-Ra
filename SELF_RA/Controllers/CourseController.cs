@@ -106,7 +106,7 @@ namespace SELF_RA.Controllers
             return new OkObjectResult(response);
         }
 
-        [HttpPost("MarkLessonCompleted")]
+        [HttpPut("MarkLessonCompleted")]
         public async Task<IActionResult> MarkLessonCompleted([FromQuery]string lessonid)
         {
             if (!ModelState.IsValid)

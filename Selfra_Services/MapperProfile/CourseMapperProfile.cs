@@ -32,13 +32,20 @@ namespace Selfra_Services.MapperProfile
                opt => opt.MapFrom(src => src.Creator != null ? src.Creator.UserName : "Unknown")).ReverseMap();
             CreateMap<Category,CategoryModifyModel>().ReverseMap();
 
-            CreateMap<Quiz,QuizzModifyModel>().ReverseMap();
-            CreateMap<QuizQuestion,QuestionModifyModel>().ReverseMap();
-            CreateMap<QuizAnswer,AnswerModifyModel>().ReverseMap();
+            CreateMap<Quiz,QuizViewModel>().ReverseMap();
+            CreateMap<QuizQuestion,QuestionViewModel>().ReverseMap();
+            CreateMap<QuizAnswer,AnswerViewModel>().ReverseMap();
 
-            CreateMap<Quiz, QuizViewModel>().ReverseMap();
-            CreateMap<QuizQuestion, QuestionViewModel>().ReverseMap();
-            CreateMap<QuizAnswer, AnswerViewModel>().ReverseMap();
+            CreateMap<Quiz, QuizzModifyModel>().ReverseMap();
+            CreateMap<QuizQuestion, QuestionModifyModel>()
+                  .ReverseMap()
+                  .ForMember(dest => dest.Quiz, opt => opt.Ignore())            
+                  .ForMember(dest => dest.Answers, opt => opt.Ignore());
+            CreateMap<AnswerModifyModel, QuizAnswer>()
+                .ForMember(dest => dest.Question, opt => opt.Ignore());
+            CreateMap<QuizAnswer, AnswerModifyModel>()
+                .ReverseMap()
+                .ForMember(dest => dest.Question, opt => opt.Ignore());
             CreateMap<QuizResult, QuizResultModel>().ForMember(dest => dest.QuizName,
                opt => opt.MapFrom(src => src.Quiz != null ? src.Quiz.Title : "Unknown")).
                ForMember(dest => dest.UserName,
