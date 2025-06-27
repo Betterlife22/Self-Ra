@@ -9,7 +9,8 @@ using Selfra_Repositories.Base;
 using System.Reflection;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Options;
+using Net.payOS;
 namespace SELF_RA.DI
 {
     public static class DependencyInjection
@@ -26,6 +27,9 @@ namespace SELF_RA.DI
             services.AddIdentity(configuration);
             services.AddHttpContextAccessor();
             services.AddMemoryCache();
+            services.NewsApiSettingsConfig(configuration);
+            services.OpenAiSettingsConfig(configuration);
+            services.AddPayOS(configuration);
         }
         public static void AddIdentity(this IServiceCollection services, IConfiguration configuration)
         {
@@ -59,12 +63,22 @@ namespace SELF_RA.DI
                 options.AddPolicy("CorsPolicy",
                     builder =>
                     {
-                        builder.WithOrigins("*")
-                               .AllowAnyHeader()
-                               .AllowAnyMethod();
+                        builder.WithOrigins("http://127.0.0.1:5501", "https://localhost:7126")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
                     });
+                //options.AddDefaultPolicy(policy =>
+                //{
+                //    policy.WithOrigins("http://localhost:5500", "https://localhost:7126")
+                //          .AllowAnyHeader()
+                //          .AllowAnyMethod()
+                //          .AllowCredentials();
+                //});
             });
         }
+
+
         //public static void ConfigCorsSignalR(this IServiceCollection services)
         //{
         //    services.AddCors(options =>
@@ -110,6 +124,23 @@ namespace SELF_RA.DI
                 };
                 e.SaveToken = true;
                 e.RequireHttpsMetadata = true;
+                e.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/chathub")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
         }
         public static void ConfigSwagger(this IServiceCollection services)
@@ -175,6 +206,52 @@ namespace SELF_RA.DI
             {
                 options.UseLazyLoadingProxies().UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+        }
+        public static void OpenAiSettingsConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton(option =>
+            {
+                var settings = new OpenAISettings
+                {
+                    ApiKey = configuration.GetValue<string>("OpenAI:ApiKey") ?? string.Empty
+                };
+
+                if (string.IsNullOrEmpty(settings.ApiKey))
+                    throw new Exception("OpenAI:ApiKey không được để trống trong cấu hình.");
+
+                return settings;
+            });
+        }
+
+        public static void NewsApiSettingsConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton(option =>
+            {
+                var settings = new AINewsSettings
+                {
+                    ApiKey = configuration.GetValue<string>("NewsApi:ApiKey") ?? string.Empty
+                };
+
+                if (string.IsNullOrEmpty(settings.ApiKey))
+                    throw new Exception("NewsApi:ApiKey không được để trống trong cấu hình.");
+
+                return settings;
+            });
+        }
+        public static void AddPayOS(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<PayOSOptions>(configuration.GetSection("PayOS"));
+
+            services.AddScoped<PayOS>(sp =>
+            {
+                var options = sp.GetRequiredService<IOptions<PayOSOptions>>().Value;
+                return new PayOS(
+                    options.ClientId,
+                    options.ApiKey,
+                    options.ChecksumKey
+                );
+            });
+
         }
     }
 }

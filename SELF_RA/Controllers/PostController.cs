@@ -32,10 +32,10 @@ namespace SELF_RA.Controllers
             return Ok(BaseResponse<ResponsePostModel>.OkDataResponse(list, "Lấy danh sách thành công"));
         }
         [HttpGet("GetPostById")]
-        public async Task<IActionResult> GetFoodDetailById(string id)
+        public async Task<IActionResult> GetPostVoteById(string id)
         {
             ResponsePostModel model = await _postService.GetPostById(id);
-            return Ok(BaseResponse<string>.OkMessageResponseModel("Lấy Post thành công"));
+            return Ok(BaseResponse<ResponsePostModel>.OkDataResponse(model,"Lấy Post thành công"));
         }
 
         [HttpPut("UpdatePost")]
@@ -49,6 +49,13 @@ namespace SELF_RA.Controllers
         public async Task<IActionResult> DeletePost(string id)
         {
             await _postService.DeletePost(id);
+            return Ok(BaseResponse<string>.OkMessageResponseModel("Xóa Post thành công"));
+        }
+
+        [HttpDelete("DeleteAll")]
+        public async Task<IActionResult> DeleteAll()
+        {
+            await _postService.DeleteAll();
             return Ok(BaseResponse<string>.OkMessageResponseModel("Xóa Post thành công"));
         }
     }

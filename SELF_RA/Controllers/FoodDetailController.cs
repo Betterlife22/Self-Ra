@@ -8,11 +8,11 @@ namespace SELF_RA.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FoodDetailCotroller : ControllerBase
+    public class FoodDetailController : ControllerBase
     {
         private readonly IFoodDetailService _foodDetailService;
 
-        public FoodDetailCotroller(IFoodDetailService foodDetailService) {
+        public FoodDetailController(IFoodDetailService foodDetailService) {
             _foodDetailService = foodDetailService;
         }
 
@@ -33,7 +33,7 @@ namespace SELF_RA.Controllers
         public async Task<IActionResult> GetFoodDetailById(string id)
         {
             ResponseFoodDetailModel model = await _foodDetailService.GetFoodDetailById(id);
-            return Ok(BaseResponse<string>.OkMessageResponseModel("Lấy foodetail thành công"));
+            return Ok(BaseResponse<ResponseFoodDetailModel>.OkDataResponse(model, "Lấy foodetail thành công"));
         }
 
         [HttpPut("UpdateFoodDetail")]

@@ -2,10 +2,13 @@
 
 using AutoMapper;
 using Selfra_Entity.Model;
+using Selfra_ModelViews.Model.CommentVoteModel;
 using Selfra_ModelViews.Model.FoodDetailModel;
+using Selfra_ModelViews.Model.ForumModel;
 using Selfra_ModelViews.Model.MentorContact;
 using Selfra_ModelViews.Model.MentorModel;
 using Selfra_ModelViews.Model.PostModel;
+using Selfra_ModelViews.Model.PostVoteModel;
 using Selfra_ModelViews.Model.RoleModel;
 using Selfra_ModelViews.Model.UserModel;
 
@@ -39,6 +42,18 @@ namespace Selfra_Services.MapperProfile
             CreateMap<CreateMentorContact ,MentorContact>().ReverseMap();
             CreateMap<UpdateMentorContact, MentorContact>().ReverseMap();
             CreateMap<ResponseMentorContact, MentorContact>().ReverseMap();
+
+            CreateMap<CreatePostVoteModel, PostVote>().ReverseMap();
+            CreateMap<UpdatePostVoteModel, PostVote>().ReverseMap();
+            CreateMap<ResponsePostVoteModel, PostVote>().ReverseMap();
+
+            CreateMap<CreateForumModel, ForumComment>().ReverseMap();
+            CreateMap<UpdateForumModel, ForumComment>().ReverseMap();
+            CreateMap<ResponseForumComment, ForumComment>().ReverseMap();
+
+            CreateMap<CreateCommentVoteModel, CommentVote>().ReverseMap();
+            CreateMap<UpdateCommentVoteModel, CommentVote>().ReverseMap();
+            CreateMap<ResponseCommentVoteModel, CommentVote>().ReverseMap();
         }
     }
 }

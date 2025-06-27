@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
 using Microsoft.AspNetCore.Http;
 using Selfra_Contract_Services.Interface;
 using Selfra_Entity.Model;
@@ -23,6 +24,20 @@ namespace Selfra_Services.Service
             _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+        }
+
+        public async Task AddMembertoGroup(string userId, string conservationId)
+        {
+            var newparticipant = new ConversationParticipant()
+            {
+                ConversationId = conservationId,
+                UserId =Guid.Parse(userId),
+                IsAdmin = false,
+                CreatedTime = DateTime.UtcNow
+
+            };
+            await _unitOfWork.GetRepository<ConversationParticipant>().AddAsync(newparticipant);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task CreateGroupConversation(GroupModel groupmodel)
@@ -82,23 +97,36 @@ namespace Selfra_Services.Service
             return result;
         }
 
+        public async Task MarkMessageAsRead(string conversationId)
+        {
+            var userid = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+            var unreadMessage = await _unitOfWork.GetRepository<Message>().GetAllByPropertyAsync(
+                m => m.ConversationId == conversationId && m.SenderId == Guid.Parse(userid) && !m.IsRead);
+            foreach (var item in unreadMessage)
+            {
+                item.IsRead = true;
+                
+            }
+            await _unitOfWork.SaveAsync();
+        }
+
         public async Task SendMessage(SendMessageModel messagemodel)
         {
             var senderId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
             var message = _mapper.Map<Message>(messagemodel);
             message.SenderId = Guid.Parse(senderId);            
             await _unitOfWork.GetRepository<Message>().AddAsync(message);
-            var conversation = await _unitOfWork.GetRepository<Conversation>().GetByIdAsync(messagemodel.ConversationId);
-            var sender = await _unitOfWork.GetRepository<ApplicationUser>().GetByIdAsync(senderId);
+            var conversation = await _unitOfWork.GetRepository<Conversation>().GetByIdAsync(messagemodel.ConversationId);          
+            var sender = await _unitOfWork.GetRepository<ApplicationUser>().GetByPropertyAsync(s=>s.Id == Guid.Parse(senderId));
             conversation.LastMessage = messagemodel.Content;
-            conversation.LastSenderName = message.Sender.UserName;
+            conversation.LastSenderName = sender.UserName;
             await _unitOfWork.SaveAsync();
         }
 
         public async Task StartConversation(string secondUserid)
         {
             var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
-            var secondUser = await _unitOfWork.GetRepository<ApplicationUser>().GetByIdAsync(secondUserid);
+            var secondUser = await _unitOfWork.GetRepository<ApplicationUser>().GetByIdAsync(Guid.Parse(secondUserid));
 
             var conversation = new Conversation()
             {

@@ -61,6 +61,11 @@ namespace Selfra_Services.Service
                                                       UserId = post.UserId,
                                                       Content = post.Content,
                                                       Title = post.Title,
+                                                      IsActive = post.IsActive,
+                                                      Category = post.CategoryPost,
+                                                      ArticleUrl = post.ArticleUrl,
+                                                      ImageUrl = post.ImageUrl,
+                                                      
                                                   };
 
             if (!string.IsNullOrWhiteSpace(searchName))
@@ -78,7 +83,7 @@ namespace Selfra_Services.Service
                 ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy Post");
         
             ResponsePostModel model = _mapper.Map<ResponsePostModel>(check);
-
+            
             return model;
         }
 
@@ -96,6 +101,17 @@ namespace Selfra_Services.Service
             check.LastUpdatedBy = Authentication.GetUserIdFromHttpContextAccessor(_contextAccessor);
 
             await _unitOfWork.GetRepository<Post>().UpdateAsync(check);
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task DeleteAll()
+        {
+            IEnumerable<Post> all = await _unitOfWork.GetRepository<Post>().GetAllAsync();
+            foreach(Post post in all)
+            {
+                await _unitOfWork.GetRepository<Post>().DeleteAsync(post.Id);
+            }
+            
             await _unitOfWork.SaveAsync();
         }
     }

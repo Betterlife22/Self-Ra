@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="payOS.Net5" Version="1.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Selfra_Core\Selfra_Core.csproj" />
     <ProjectReference Include="..\Selfra_ModelViews\Selfra_ModelViews.csproj" />
     <ProjectReference Include="..\Selft.Contract.Repositories\Selft.Contract.Repositories.csproj" />

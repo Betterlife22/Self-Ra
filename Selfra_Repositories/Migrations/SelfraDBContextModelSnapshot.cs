@@ -997,6 +997,12 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ArticleUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CategoryPost")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
@@ -1012,7 +1018,10 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastUpdatedBy")
@@ -1607,7 +1616,7 @@ namespace Selfra_Repositories.Migrations
             modelBuilder.Entity("Selfra_Entity.Model.ConversationParticipant", b =>
                 {
                     b.HasOne("Selfra_Entity.Model.Conversation", "Conversation")
-                        .WithMany()
+                        .WithMany("Participants")
                         .HasForeignKey("ConversationId");
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
@@ -1882,6 +1891,8 @@ namespace Selfra_Repositories.Migrations
             modelBuilder.Entity("Selfra_Entity.Model.Conversation", b =>
                 {
                     b.Navigation("Messages");
+
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("Selfra_Entity.Model.Course", b =>
