@@ -88,15 +88,15 @@ namespace Selfra_Services.Service
                 ProgressPercentage = c.ProgressPercentage,
                 IsCompleted = c.IsCompleted,
                 CompletedAt = c.CompletedAt,
-                Lessons = lessonlist
+            //    Lessons = lessonlist
 
-                .Where(l => l.Lesson != null && l.Lesson.CourseId == c.CourseId)
-                .Select(l => new LessonProgressViewModel
-                {
-                    LessonName = l.Lesson.Title ?? "Unknown",
-                    IsCompleted = l.IsCompleted
-                })
-            .ToList()
+            //    .Where(l => l.Lesson != null && l.Lesson.CourseId == c.CourseId)
+            //    .Select(l => new LessonProgressViewModel
+            //    {
+            //        LessonName = l.Lesson.Title ?? "Unknown",
+            //        IsCompleted = l.IsCompleted
+            //    })
+            //.ToList()
             });
             // Querycourse = courseViewModels.ProjectTo<CourseProgessViewModel>(_mapper.ConfigurationProvider);
             PaginatedList<CourseProgessViewModel> paginatedourse = await _unitOfWork.GetRepository<CourseProgessViewModel>().GetPagingAsync(courseViewModels.AsQueryable(), index, pageSize);
