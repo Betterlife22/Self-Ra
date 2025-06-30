@@ -50,6 +50,7 @@ namespace Selfra_Services
             services.AddScoped<IGPTClassificationService, GPTClassificationService>();
             services.AddScoped<IForumCommentService, ForumCommentService>();
             services.AddScoped<ICommentVoteService, CommentVoteService>();
+            services.AddScoped <IPackageService, PackageService>();
         }
     }
 }

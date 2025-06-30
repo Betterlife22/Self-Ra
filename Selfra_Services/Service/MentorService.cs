@@ -59,6 +59,7 @@ namespace Selfra_Services.Service
                                                   where !mentor.DeletedTime.HasValue
                                                   select new ResponseMentorModel
                                                   {
+                                                      MentorId = mentor.Id,
                                                       UserId = mentor.UserId,
                                                       Bio = mentor.Bio,
                                                       ExpertiseAreas = mentor.ExpertiseAreas,

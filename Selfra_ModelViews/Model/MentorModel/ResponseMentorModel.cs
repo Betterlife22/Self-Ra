@@ -4,6 +4,7 @@ namespace Selfra_ModelViews.Model.MentorModel
 {
     public class ResponseMentorModel
     {
+        public string? MentorId { get; set; }
         public Guid? UserId { get; set; }
         public string? Bio { get; set; }
         public string? ExpertiseAreas { get; set; }
