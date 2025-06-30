@@ -33,6 +33,12 @@ namespace SELF_RA.Controllers
             var response = BaseResponseModel<string>.OkMessageResponseModel("Create Successfull");
             return new OkObjectResult(response);
         }
+        [HttpGet("GetAllCategory")]
+        public async Task<IActionResult> GetAllCategory()
+        {
+            var categories = await _categoryService.GetAllCategory();
+            return new OkObjectResult(categories);
+        }
         [HttpPost("CreateCourse")]
         public async Task<IActionResult> CreateCourse([FromForm] CourseModifyModel courseModifyModel)
         {
@@ -124,7 +130,7 @@ namespace SELF_RA.Controllers
             var response = BaseResponseModel<string>.OkMessageResponseModel("update successfully");
             return new OkObjectResult(response);
         }
-
+       
 
     }
 }

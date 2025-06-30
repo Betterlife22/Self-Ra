@@ -14,5 +14,6 @@ namespace Selfra_Contract_Services.Interface
         public Task UpdateCourse(string courseid,CourseModifyModel courseModifyModel);
         public Task<PaginatedList<CourseViewModel>> GetAllCourse(int index, int pageSize);
         public Task<CourseViewModel> GetCourseById(string id);
+
     }
 }
