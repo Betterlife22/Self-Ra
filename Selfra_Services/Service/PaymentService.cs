@@ -24,7 +24,7 @@ namespace Selfra_Services.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PayOS _payOS;
-        
+
 
         public PaymentService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, PayOS payOS)
         {
@@ -38,8 +38,7 @@ namespace Selfra_Services.Service
                 ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy Package");
 
             string orderId = Guid.NewGuid().ToString("N");
-            long orderCode = long.Parse(
-                DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString().PadRight(15, '0')[..15]);
+            long orderCode = long.Parse(TimeHelper.ConvertToUtcPlus7NotChanges(DateTimeOffset.Now).ToString("ffffff"));
 
             var item = new ItemData(package.Name, 1, (int)package.Price);
 
@@ -123,4 +122,7 @@ namespace Selfra_Services.Service
             return calculated == checksumHeader.ToLower();
         }
     }
+
+
+    
 }
