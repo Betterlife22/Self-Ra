@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Selfra_Repositories.Base;
 
@@ -11,9 +12,11 @@ using Selfra_Repositories.Base;
 namespace Selfra_Repositories.Migrations
 {
     [DbContext(typeof(SelfraDBContext))]
-    partial class SelfraDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250627083940_SixthMigration")]
+    partial class SixthMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1354,9 +1357,6 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PackageId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("PaymentLinkId")
                         .HasColumnType("nvarchar(max)");
 
@@ -1374,8 +1374,6 @@ namespace Selfra_Repositories.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PackageId");
 
                     b.HasIndex("UserPackageId");
 
@@ -1537,12 +1535,14 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PackageId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserPackages");
                 });
@@ -1825,15 +1825,9 @@ namespace Selfra_Repositories.Migrations
 
             modelBuilder.Entity("Selfra_Entity.Model.Transaction", b =>
                 {
-                    b.HasOne("Selfra_Entity.Model.Package", "Package")
-                        .WithMany()
-                        .HasForeignKey("PackageId");
-
                     b.HasOne("Selfra_Entity.Model.UserPackage", "UserPackage")
                         .WithMany()
                         .HasForeignKey("UserPackageId");
-
-                    b.Navigation("Package");
 
                     b.Navigation("UserPackage");
                 });
@@ -1889,7 +1883,13 @@ namespace Selfra_Repositories.Migrations
                         .WithMany()
                         .HasForeignKey("PackageId");
 
+                    b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Package");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Selfra_Entity.Model.Category", b =>
