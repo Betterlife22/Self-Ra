@@ -88,15 +88,15 @@ namespace Selfra_Services.Service
                 ProgressPercentage = c.ProgressPercentage,
                 IsCompleted = c.IsCompleted,
                 CompletedAt = c.CompletedAt,
-                Lessons = lessonlist
+            //    Lessons = lessonlist
 
-                .Where(l => l.Lesson != null && l.Lesson.CourseId == c.CourseId)
-                .Select(l => new LessonProgressViewModel
-                {
-                    LessonName = l.Lesson.Title ?? "Unknown",
-                    IsCompleted = l.IsCompleted
-                })
-            .ToList()
+            //    .Where(l => l.Lesson != null && l.Lesson.CourseId == c.CourseId)
+            //    .Select(l => new LessonProgressViewModel
+            //    {
+            //        LessonName = l.Lesson.Title ?? "Unknown",
+            //        IsCompleted = l.IsCompleted
+            //    })
+            //.ToList()
             });
             // Querycourse = courseViewModels.ProjectTo<CourseProgessViewModel>(_mapper.ConfigurationProvider);
             PaginatedList<CourseProgessViewModel> paginatedourse = await _unitOfWork.GetRepository<CourseProgessViewModel>().GetPagingAsync(courseViewModels.AsQueryable(), index, pageSize);
@@ -134,16 +134,11 @@ namespace Selfra_Services.Service
         public async Task MarkLessonComplete(string lessonid)
         {
             var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
-
-            var userlessonProgress = new UserLessonProgress()
-            {
-                UserId = Guid.Parse(userId),
-                LessonId = lessonid,
-                IsCompleted = true,
-                LastUpdatedTime = DateTime.UtcNow
-
-            };
-            await _unitOfWork.GetRepository<UserLessonProgress>().AddAsync(userlessonProgress);
+            var lessonexisted = await _unitOfWork.GetRepository<Lesson>().GetByPropertyAsync(l => l.Id == lessonid);            
+            var userlessonProgress = await _unitOfWork.GetRepository<UserLessonProgress>()
+                .GetByPropertyAsync(l=>l.LessonId == lessonid && l.UserId == Guid.Parse(userId));
+            userlessonProgress.IsCompleted = true;
+            userlessonProgress.LastUpdatedTime = DateTime.UtcNow;
             await _unitOfWork.SaveAsync();
         }
 

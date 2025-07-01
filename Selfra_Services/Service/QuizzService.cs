@@ -27,18 +27,22 @@ namespace Selfra_Services.Service
         }
         public async Task Createquiz(QuizzModifyModel quizzModifyModel)
         {
-            var quiz = _mapper.Map<Quiz>(quizzModifyModel);
-            await _unitOfWork.GetRepository<Quiz>().AddAsync(quiz);
-            foreach (var item in quizzModifyModel.Questions)
+            var quiz = new Quiz
             {
-                var question = _mapper.Map<QuizQuestion>(item);
-                await _unitOfWork.GetRepository<QuizQuestion>().AddAsync(question);
-                foreach (var answer in item.Answers)
+                CourseId = quizzModifyModel.CourseId,
+                Title = quizzModifyModel.Title,
+                Questions = quizzModifyModel.Questions.Select(q => new QuizQuestion
                 {
-                    var ans = _mapper.Map<QuizAnswer>(answer);
-                    await _unitOfWork.GetRepository<QuizAnswer>().AddAsync(ans);
-                }
-            }
+                    QuestionText = q.QuestionText,
+                    Answers = q.Answers.Select(a => new QuizAnswer
+                    {
+                        AnswerText = a.AnswerText,
+                        IsCorrect = a.IsCorrect
+                    }).ToList()
+                }).ToList()
+            };
+
+            await _unitOfWork.GetRepository<Quiz>().AddAsync(quiz);
             await _unitOfWork.SaveAsync();
 
         }
