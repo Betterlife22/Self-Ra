@@ -51,6 +51,7 @@ namespace Selfra_Services
             services.AddScoped<IForumCommentService, ForumCommentService>();
             services.AddScoped<ICommentVoteService, CommentVoteService>();
             services.AddScoped <IPackageService, PackageService>();
+            services.AddScoped<IPayMentService, PaymentService>();
         }
     }
 }
