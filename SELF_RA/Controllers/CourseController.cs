@@ -102,34 +102,34 @@ namespace SELF_RA.Controllers
             var response = BaseResponseModel<List<CourseProgessViewModel>>.OkDataResponse(courseprogressList, "Load successfully");
             return new OkObjectResult(response);
         }
-        [HttpPost("StartLesson")]
-        public async Task <IActionResult> StartLesson([FromBody] LessonStartModel model)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            await _courseProgressService.StartLesson(model);
-            var response = BaseResponseModel<string>.OkMessageResponseModel("Start successfully");
-            return new OkObjectResult(response);
-        }
+        //[HttpPost("StartLesson")]
+        //public async Task <IActionResult> StartLesson([FromBody] LessonStartModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+        //    await _courseProgressService.StartLesson(model);
+        //    var response = BaseResponseModel<string>.OkMessageResponseModel("Start successfully");
+        //    return new OkObjectResult(response);
+        //}
 
         [HttpPut("MarkLessonCompleted")]
-        public async Task<IActionResult> MarkLessonCompleted([FromQuery]string lessonid)
+        public async Task<IActionResult> MarkLessonCompleted([FromQuery]string lessonid, string courseid)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await _courseProgressService.MarkLessonComplete(lessonid);
+            await _courseProgressService.MarkLessonComplete(lessonid,courseid);
             var response = BaseResponseModel<string>.OkMessageResponseModel("update successfully");
             return new OkObjectResult(response);
         }
-        [HttpPut("UpdateProgress")]
-        public async Task<IActionResult> UpdateProgress([FromQuery] string courseid)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            await _courseProgressService.CalculateProgress(courseid);
-            var response = BaseResponseModel<string>.OkMessageResponseModel("update successfully");
-            return new OkObjectResult(response);
-        }
+        //[HttpPut("UpdateProgress")]
+        //public async Task<IActionResult> UpdateProgress([FromQuery] string courseid)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+        //    await _courseProgressService.CalculateProgress(courseid);
+        //    var response = BaseResponseModel<string>.OkMessageResponseModel("update successfully");
+        //    return new OkObjectResult(response);
+        //}
        
 
     }

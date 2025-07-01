@@ -20,8 +20,10 @@ namespace Selfra_Services.MapperProfile
             CreateMap<Course, CourseModifyModel>().ReverseMap();
             CreateMap<Course, CourseViewModel>().ForMember(dest => dest.CreatorName,
                opt => opt.MapFrom(src => src.Creator != null ? src.Creator.UserName : "Unknown"))
+                .ForMember(dest => dest.Lessons, opt => opt.MapFrom(src =>
+                src.Lessons.OrderBy(l => l.OrderIndex)))
                .ReverseMap();
-
+           
             CreateMap<UserCourseProgress, CourseProgessViewModel>().ForMember(dest => dest.CourseName,
                opt => opt.MapFrom(src => src.Course != null ? src.Course.Title : "Unknown"))
             .ReverseMap();
