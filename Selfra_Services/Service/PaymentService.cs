@@ -38,7 +38,7 @@ namespace Selfra_Services.Service
                 ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy Package");
 
             string orderId = Guid.NewGuid().ToString("N");
-            long orderCode = long.Parse(TimeHelper.ConvertToUtcPlus7NotChanges(DateTimeOffset.Now).ToString("ffffff"));
+            long orderCode = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
             var item = new ItemData(package.Name, 1, (int)package.Price);
 
