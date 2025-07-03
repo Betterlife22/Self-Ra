@@ -38,8 +38,11 @@ namespace Selfra_Services.Service
                 ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy Package");
 
             var orderId = Guid.NewGuid();
-            long orderCode = BitConverter.ToInt64(orderId.ToByteArray(), 0);
-            orderCode = Math.Abs(orderCode);
+            long rawCode = BitConverter.ToInt64(orderId.ToByteArray(), 0);
+            rawCode = Math.Abs(rawCode);
+
+            // Ensure it's at most 15 digits by applying modulo
+            long orderCode = rawCode % 1_000_000_000_000_000;
 
             var item = new ItemData(package.Name, 1, (int)package.Price);
 
