@@ -24,9 +24,9 @@ namespace SELF_RA.Controllers
             return Ok(BaseResponse<string>.OkDataResponse(result, "Tạo link thành công"));
         }
         [HttpPost("webhook/payos")]
-        public async Task<IActionResult> Webhook([FromBody] object payload)
+        public async Task<IActionResult> Webhook()
         {
-            var rawBody = payload.ToString()!;
+            var rawBody = Request.Body.ToString()!;
             var checksum = Request.Headers["x-checksum"].ToString();
 
             await _payMentService.HandlePayOSWebhookAsync(rawBody, checksum);

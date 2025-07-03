@@ -37,8 +37,9 @@ namespace Selfra_Services.Service
             Package package = await _unitOfWork.GetRepository<Package>().Entities.FirstOrDefaultAsync(p => p.Id == packageId && !p.DeletedTime.HasValue) 
                 ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy Package");
 
-            string orderId = Guid.NewGuid().ToString("N");
-            long orderCode = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            var orderId = Guid.NewGuid();
+            long orderCode = BitConverter.ToInt64(orderId.ToByteArray(), 0);
+            orderCode = Math.Abs(orderCode);
 
             var item = new ItemData(package.Name, 1, (int)package.Price);
 
@@ -54,7 +55,7 @@ namespace Selfra_Services.Service
 
             Transaction transaction = new Transaction
             {
-                OrderId = orderId,
+                OrderId = orderId.ToString(),
                 PaymentLinkId = result.paymentLinkId,
                 PackageId = packageId,
                 PaymentMethod = "PayOS",
@@ -67,7 +68,7 @@ namespace Selfra_Services.Service
             return new CreatePaymentResultModel
             { 
                 CheckoutUrl = result.checkoutUrl,
-                OrderId = orderId
+                OrderId = orderId.ToString()
             };
             
         }
