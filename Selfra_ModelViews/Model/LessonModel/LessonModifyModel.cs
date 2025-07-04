@@ -13,7 +13,7 @@ namespace Selfra_ModelViews.Model.LessonModel
         public string? Title { get; set; }
         public string? Slug { get; set; }
         public string? Description { get; set; }
-        public IFormFile? VideoUrl { get; set; }
+        public string? VideoUrl { get; set; }
         public int Duration { get; set; }
         public int OrderIndex { get; set; }
         public bool IsFreePreview { get; set; }

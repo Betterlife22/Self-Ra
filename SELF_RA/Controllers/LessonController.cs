@@ -17,7 +17,7 @@ namespace SELF_RA.Controllers
         }
 
         [HttpPost("CreateLesson")]
-        public async Task<IActionResult> CreateLesson([FromForm] LessonModifyModel lessonModifyModel)
+        public async Task<IActionResult> CreateLesson([FromBody] LessonModifyModel lessonModifyModel)
         {
             await _lessonService.CreateLesson(lessonModifyModel);
             var response = BaseResponseModel<string>.OkMessageResponseModel("Create successfully");
