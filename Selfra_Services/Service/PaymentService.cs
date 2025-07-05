@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Net.payOS;
 using Net.payOS.Types;
 using Newtonsoft.Json;
@@ -24,13 +25,14 @@ namespace Selfra_Services.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PayOS _payOS;
+        private readonly PayOSOptions _payOSOptions;
 
-
-        public PaymentService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, PayOS payOS)
+        public PaymentService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, PayOS payOS, IOptions<PayOSOptions> payosOptions)
         {
             _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
             _payOS = payOS;
+            _payOSOptions = payosOptions.Value;
         }
         public async Task<CreatePaymentResultModel> CreatePaymentLinkAsync(string packageId)
         {
@@ -116,9 +118,8 @@ namespace Selfra_Services.Service
 
         private bool VerifyWebhookSignature(string rawBody, string checksumHeader)
         {
-            var payos = new PayOSOptions();
             // Dùng checksum key từ cấu hình
-            var checksumKey = payos.ChecksumKey;
+            var checksumKey = _payOSOptions.ChecksumKey;
             using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(checksumKey));
             var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(rawBody));
             var calculated = BitConverter.ToString(hash).Replace("-", "").ToLower();

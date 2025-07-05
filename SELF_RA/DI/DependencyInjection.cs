@@ -242,7 +242,6 @@ namespace SELF_RA.DI
         {
             services.Configure<PayOSOptions>(configuration.GetSection("PayOS"));
 
-            // 2️⃣ Tạo 1 instance PayOS duy nhất (Singleton đủ, hoặc Scoped cũng OK)
             services.AddSingleton<PayOS>(sp =>
             {
                 var opts = sp.GetRequiredService<IOptions<PayOSOptions>>().Value;
