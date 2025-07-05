@@ -26,12 +26,12 @@ namespace SELF_RA.Controllers
         [HttpPost("webhook/payos")]
         public async Task<IActionResult> Webhook()
         {
-            var rawBody = Request.Body.ToString()!;
+            using var reader = new StreamReader(Request.Body);
+            var rawBody = await reader.ReadToEndAsync();
             var checksum = Request.Headers["x-checksum"].ToString();
 
             await _payMentService.HandlePayOSWebhookAsync(rawBody, checksum);
-            return Ok(BaseResponse<string>.OkMessageResponseModel("Thanh toán thanh cong"));
-
+            return Ok(new { success = true }); 
         }
     }
 }
