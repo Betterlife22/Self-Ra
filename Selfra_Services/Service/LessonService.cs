@@ -25,9 +25,9 @@ namespace Selfra_Services.Service
         }
         public async Task CreateLesson(LessonModifyModel lessonModifyModel)
         {
-            string videourl = await _unitOfWork.UploadFileAsync(lessonModifyModel.VideoUrl);
+            //string videourl = await _unitOfWork.UploadFileAsync(lessonModifyModel.VideoUrl);
             var lesson = _mapper.Map<Lesson>(lessonModifyModel);
-            lesson.VideoUrl = videourl;
+            //lesson.VideoUrl = videourl;
             await _unitOfWork.GetRepository<Lesson>().AddAsync(lesson);
             await _unitOfWork.SaveAsync();
         }
