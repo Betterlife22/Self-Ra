@@ -4,6 +4,7 @@ using Selfra_Contract_Services.Interface;
 using Selfra_Core.Base;
 using Selfra_ModelViews.Model.MentorContact;
 using Selfra_ModelViews.Model.MentorModel;
+using Selfra_ModelViews.Model.UserModel;
 
 namespace SELF_RA.Controllers
 {
@@ -12,16 +13,23 @@ namespace SELF_RA.Controllers
     public class MentorContactController : ControllerBase
     {
         private readonly IMentorContactService _mentorContactService;
-
-        public MentorContactController(IMentorContactService mentorContactService)
+        private readonly IAuthService _authService;
+        public MentorContactController(IMentorContactService mentorContactService, IAuthService authService)
         {
             _mentorContactService = mentorContactService;
+            _authService = authService;
         }
 
         [HttpPost("CreateMentorContact")]
         public async Task<IActionResult> CreateMentorContact(CreateMentorContact model)
         {
+            UserInfoModel modeluser = await _authService.GetUserInfo();
+            
             await _mentorContactService.CreateMentorContact(model);
+            await _mentorContactService.NotifyMentorAsync(
+                model.MentorId,
+                $"Bạn có một yêu cầu kết nối mới từ {modeluser.FullName}"
+            );
             return Ok(BaseResponse<string>.OkMessageResponseModel("Tạo mới MentorContact thành công"));
         }
 

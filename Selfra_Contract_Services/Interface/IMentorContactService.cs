@@ -16,5 +16,6 @@ namespace Selfra_Contract_Services.Interface
         Task UpdateMentorContact (UpdateMentorContact updateMentorContact);
 
         Task DeleteMentorContact (string? id);
+        Task NotifyMentorAsync(string mentorId, string message);
     }
 }
