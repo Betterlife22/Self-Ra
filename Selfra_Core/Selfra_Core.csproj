@@ -20,7 +20,5 @@
     <Folder Include="ExceptionCustom\" />
     <Folder Include="Constaint\" />
     <Folder Include="ExceptionCustom\" />
-    <Folder Include="Utils\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
 </Project>
