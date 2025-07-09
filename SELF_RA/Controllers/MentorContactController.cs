@@ -14,10 +14,12 @@ namespace SELF_RA.Controllers
     {
         private readonly IMentorContactService _mentorContactService;
         private readonly IAuthService _authService;
-        public MentorContactController(IMentorContactService mentorContactService, IAuthService authService)
+        private readonly IFireBaseService _firebaseSerivce;
+        public MentorContactController(IMentorContactService mentorContactService, IAuthService authService,IFireBaseService firebaseSerivce)
         {
             _mentorContactService = mentorContactService;
             _authService = authService;
+            _firebaseSerivce = firebaseSerivce;
         }
 
         [HttpPost("CreateMentorContact")]
@@ -26,10 +28,15 @@ namespace SELF_RA.Controllers
             UserInfoModel modeluser = await _authService.GetUserInfo();
             
             await _mentorContactService.CreateMentorContact(model);
-            await _mentorContactService.NotifyMentorAsync(
-                model.MentorId,
-                $"Bạn có một yêu cầu kết nối mới từ {modeluser.FullName}"
-            );
+
+            var token = await _firebaseSerivce.GetTokenByUserIdAsync(model.MentorId);
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                await _firebaseSerivce.SendNotificationAsync(token,
+                    "New Contact Request",
+                    $"User {model.UserId} says: {model.Message}");
+            }
             return Ok(BaseResponse<string>.OkMessageResponseModel("Tạo mới MentorContact thành công"));
         }
 

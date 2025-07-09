@@ -89,15 +89,15 @@ namespace Selfra_Services.Service
             return model;
         }
 
-        public async Task NotifyMentorAsync(string mentorId, string message)
-        {
-            var connectionId = MentorConnection.GetConnectionId(mentorId);
-            if (!string.IsNullOrEmpty(connectionId))
-            {
-                await _hubContext.Clients.Client(connectionId)
-                    .SendAsync("ReceiveNotification", message);
-            }
-        }
+        //public async Task NotifyMentorAsync(string mentorId, string message)
+        //{
+        //    var connectionId = MentorConnection.GetConnectionId(mentorId);
+        //    if (!string.IsNullOrEmpty(connectionId))
+        //    {
+        //        await _hubContext.Clients.Client(connectionId)
+        //            .SendAsync("ReceiveNotification", message);
+        //    }
+        //}
 
         public async Task UpdateMentorContact(UpdateMentorContact updateMentorContact)
         {

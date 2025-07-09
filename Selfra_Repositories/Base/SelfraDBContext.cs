@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Selfra_Entity.Entity;
 using Selfra_Entity.Model;
 using System.Reflection.Emit;
 
@@ -50,6 +51,8 @@ namespace Selfra_Repositories.Base
         public DbSet<UserLessonProgress> UserLessonProgresses { get; set; }
         public DbSet<UserNewsPreference> UserNewsPreferences { get; set; }
         public DbSet<UserPackage> UserPackages { get; set; }
+        public DbSet<FcmToken> FcmTokens { get; set; }
+
         public virtual DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
         public virtual DbSet<ApplicationRole> ApplicationRoles => Set<ApplicationRole>();
         public virtual DbSet<ApplicationUserClaims> ApplicationUserClaims => Set<ApplicationUserClaims>();

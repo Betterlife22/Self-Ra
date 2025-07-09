@@ -12,9 +12,11 @@ namespace SELF_RA.Controllers
     public class MessageController : ControllerBase
     {
         private readonly IMessageService _messageService;
-        public MessageController(IMessageService messageService)
+        private readonly IFireBaseService _fireBaseService;
+        public MessageController(IMessageService messageService, IFireBaseService fireBaseService)
         {
             _messageService = messageService;
+            _fireBaseService = fireBaseService;
         }
         [HttpPost("StartConversation")]
         public async Task<IActionResult> StartConservation([FromQuery] string secondUserId)
