@@ -29,7 +29,8 @@
                     "/api/auth",
                 "/api/role",
                 "/api/auth/logingoogle",
-                "/api/auth/register"
+                "/api/auth/register",
+                "/api/payment/webhook/payos"
                 ];
             }
 

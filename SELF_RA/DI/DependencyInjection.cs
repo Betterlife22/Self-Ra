@@ -30,6 +30,7 @@ namespace SELF_RA.DI
             services.NewsApiSettingsConfig(configuration);
             services.OpenAiSettingsConfig(configuration);
             services.AddPayOS(configuration);
+            services.Logger(configuration);
         }
         public static void AddIdentity(this IServiceCollection services, IConfiguration configuration)
         {
@@ -246,6 +247,15 @@ namespace SELF_RA.DI
             {
                 var opts = sp.GetRequiredService<IOptions<PayOSOptions>>().Value;
                 return new PayOS(opts.ClientId, opts.ApiKey, opts.ChecksumKey);
+            });
+        }
+
+        public static void Logger(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<ILogger>(sp =>
+            {
+                var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+                return loggerFactory.CreateLogger("GlobalLogger");
             });
         }
     }
