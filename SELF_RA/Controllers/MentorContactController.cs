@@ -15,22 +15,24 @@ namespace SELF_RA.Controllers
         private readonly IMentorContactService _mentorContactService;
         private readonly IAuthService _authService;
         private readonly IFireBaseService _firebaseSerivce;
-        public MentorContactController(IMentorContactService mentorContactService, IAuthService authService,IFireBaseService firebaseSerivce)
+        private readonly IMentorService _mentorService;
+        public MentorContactController(IMentorContactService mentorContactService, IAuthService authService,IFireBaseService firebaseSerivce, IMentorService mentorService)
         {
             _mentorContactService = mentorContactService;
             _authService = authService;
             _firebaseSerivce = firebaseSerivce;
+            _mentorService = mentorService;
         }
 
         [HttpPost("CreateMentorContact")]
         public async Task<IActionResult> CreateMentorContact(CreateMentorContact model)
         {
-            UserInfoModel modeluser = await _authService.GetUserInfo();
             
             await _mentorContactService.CreateMentorContact(model);
+            var mentor = await _mentorService.GetMentorById(model.MentorId);
 
-            var token = await _firebaseSerivce.GetTokenByUserIdAsync(model.MentorId);
-
+            var token = await _firebaseSerivce.GetTokenByUserIdAsync(mentor.UserId.ToString());
+            
             if (!string.IsNullOrEmpty(token))
             {
                 await _firebaseSerivce.SendNotificationAsync(token,
