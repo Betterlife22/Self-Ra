@@ -1,4 +1,6 @@
 ﻿using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -21,10 +23,13 @@ namespace Selfra_Services.Service
     {
         private readonly FireBaseSettings _settings;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly FirestoreDb _firestoreDb;
         public FireBaseServicen(IOptions<FireBaseSettings> options, IUnitOfWork unitOfWork)
         {
             _settings = options.Value;
             _unitOfWork = unitOfWork;
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", _settings.ServiceAccountPath);
+            _firestoreDb = FirestoreDb.Create(_settings.ProjectId);
         }
         public async Task<string> GetAccessTokenAsync()
         {
@@ -98,6 +103,25 @@ namespace Selfra_Services.Service
                 var result = await response.Content.ReadAsStringAsync();
                 throw new Exception($"Push failed: {result}");
             }
+            await SaveNotificationToFirestore(title, body);
+
+        }
+        private async Task SaveNotificationToFirestore(string title, string body)
+        {
+                var doc = new Dictionary<string, object>
+            {
+                { "title", title },
+                { "body", body },
+                { "time", GetRelativeTime() }, // e.g. "Just now"
+                { "createdAt", Timestamp.GetCurrentTimestamp() }
+            };
+
+            await _firestoreDb.Collection("notifications").AddAsync(doc);
+        }
+
+        private string GetRelativeTime()
+        {
+            return "Just now"; // You can customize this with your own logic
         }
     }
 }

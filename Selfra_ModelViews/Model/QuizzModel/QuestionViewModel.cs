@@ -9,6 +9,8 @@ namespace Selfra_ModelViews.Model.QuizzModel
 {
     public class QuestionViewModel
     {
+        public string Id { get; set; }
+
         public string? QuestionText { get; set; }
         public virtual List<AnswerViewModel>? Answers { get; set; }
 
