@@ -155,9 +155,12 @@ namespace Selfra_Services.Service
                 ProgressPercentage = course?.ProgressPercentage ?? 0,
                 IsCompleted = course?.IsCompleted ?? false,
                 CompletedAt = course?.CompletedAt,
-                Lessons = lessonList.Select(l => new LessonProgressViewModel
+                Lessons = lessonList.OrderBy(l => l.Lesson != null ? l.Lesson.OrderIndex : int.MaxValue)
+                .Select(l => new LessonProgressViewModel
                 {
+                    LessonId = l.LessonId,
                     LessonName = l.Lesson?.Title ?? "Unknown",
+                    OrderIndex = l.Lesson?.OrderIndex?? 0,
                     IsCompleted = l.IsCompleted
                 }).ToList()
             };
