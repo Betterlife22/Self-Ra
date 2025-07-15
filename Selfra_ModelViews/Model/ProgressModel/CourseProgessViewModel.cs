@@ -8,6 +8,7 @@ namespace Selfra_ModelViews.Model.ProgressModel
 {
     public class CourseProgessViewModel
     {
+        public string? CourseId { get; set; }
         public string? CourseName { get; set; }
         public float ProgressPercentage { get; set; }
         public bool IsCompleted { get; set; }
