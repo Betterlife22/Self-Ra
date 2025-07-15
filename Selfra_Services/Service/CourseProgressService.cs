@@ -101,6 +101,7 @@ namespace Selfra_Services.Service
             var lessonlist =  _unitOfWork.GetRepository<UserLessonProgress>().GetQueryableByProperty(uc => uc.UserId.ToString() == userId, includeProperties: "Lesson");
             var courseViewModels = courseList.Select(c => new CourseProgessViewModel
             {
+                CourseId = c.CourseId,
                 CourseName = c.Course.Title ?? "Unknown",
                 ProgressPercentage = c.ProgressPercentage,
                 IsCompleted = c.IsCompleted,
@@ -151,6 +152,7 @@ namespace Selfra_Services.Service
             && ulp.Lesson != null && ulp.Lesson.CourseId == courseid);
             var courseViewModel = new CourseProgessViewModel
             {
+                CourseId = courseid,
                 CourseName = course?.Course?.Title ?? "Unknown",
                 ProgressPercentage = course?.ProgressPercentage ?? 0,
                 IsCompleted = course?.IsCompleted ?? false,
