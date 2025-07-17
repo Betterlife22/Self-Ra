@@ -10,6 +10,7 @@ using Selfra_Core.ExceptionCustom;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.MentorModel;
 using Selfra_ModelViews.Model.PostModel;
+using Selfra_ModelViews.Model.UserModel;
 using Selfra_Services.Infrastructure;
 using Selft.Contract.Repositories.Interface;
 
@@ -59,17 +60,27 @@ namespace Selfra_Services.Service
 
         public async Task<PaginatedList<ResponseMentorModel>> GetAllMentor(string? searchName, int index, int PageSize)
         {
-            IQueryable<ResponseMentorModel> query = from mentor in _unitOfWork.GetRepository<Mentor>().Entities
-                                                  where !mentor.DeletedTime.HasValue
+            IQueryable<ResponseMentorModel> query = from mentor in _unitOfWork.GetRepository<Mentor>().Entities.Include(m => m.User)
+                                                    where !mentor.DeletedTime.HasValue
                                                   select new ResponseMentorModel
                                                   {
-                                                      MentorId = mentor.Id,
+                                                      Id = mentor.Id,
                                                       UserId = mentor.UserId,
                                                       Bio = mentor.Bio,
                                                       ExpertiseAreas = mentor.ExpertiseAreas,
                                                       IsAvailable = mentor.IsAvailable,
                                                       Rating = mentor.Rating,
-                                                      TotalReviews = mentor.TotalReviews
+                                                      TotalReviews = mentor.TotalReviews,
+                                                      User = new ResponseUserModel
+                                                      {
+                                                          Id = mentor.User.Id.ToString(),
+                                                          Username = mentor.User.UserName,
+                                                          Email = mentor.User.Email,
+                                                          FullName = mentor.User.FullName,
+                                                          PhoneNumber = mentor.User.PhoneNumber,
+                                                          Role = "Mentor",
+                                                          CreatedTime = mentor.User.CreatedTime
+                                                      }
                                                   };
 
             if (!string.IsNullOrWhiteSpace(searchName))
@@ -88,6 +99,7 @@ namespace Selfra_Services.Service
                ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy mentor");
 
             ResponseMentorModel model = _mapper.Map<ResponseMentorModel>(mentor);
+            model.User.Role = "Mentor";
 
             return model;
 

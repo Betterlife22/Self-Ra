@@ -30,7 +30,10 @@ namespace SELF_RA.Controllers
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             TokenResponse model = await _authService.Login(loginRequest);
-            await _firebaseService.SaveOrUpdateTokenAsync(loginRequest.UserName, loginRequest.FcmToken);
+            if(loginRequest.FcmToken != null)
+            {
+                await _firebaseService.SaveOrUpdateTokenAsync(loginRequest.UserName, loginRequest.FcmToken);
+            }
 
 
             return Ok(BaseResponseModel<string>.OkDataResponse(model, "Đăng nhập thành công"));
