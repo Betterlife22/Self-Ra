@@ -16,6 +16,8 @@ namespace Selfra_Entity.Model
         /// </summary>
         public string? Password { get; set; }
 
+        public bool? isMentor { get; set; } = false;
+
         /// <summary>
         /// Ngày tạo tài khoản
         /// </summary>

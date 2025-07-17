@@ -32,12 +32,16 @@ namespace Selfra_Services.Service
         {
             ApplicationUser user = await _unitOfWork.GetRepository<ApplicationUser>().Entities.FirstOrDefaultAsync(u => u.Id == model.UserId && !u.DeletedTime.HasValue)
                 ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy UserID");
-
+            Mentor check = await _unitOfWork.GetRepository<Mentor>().Entities.FirstOrDefaultAsync(m => m.UserId == model.UserId && !m.DeletedTime.HasValue)
+                ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "User nay da co ho so mentor");
             Mentor mentor = _mapper.Map<Mentor>(model);
+
+            user.isMentor = true;
             mentor.CreatedTime = DateTime.Now;
             mentor.CreatedBy = Authentication.GetUserIdFromHttpContextAccessor(_contextAccessor);
 
             await _unitOfWork.GetRepository<Mentor>().AddAsync(mentor);
+            await _unitOfWork.GetRepository<ApplicationUser>().UpdateAsync(user);
             await _unitOfWork.SaveAsync();
         }
 
