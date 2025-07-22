@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Net.payOS;
 using Net.payOS.Types;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Selfra_Contract_Services.Interface;
 using Selfra_Core.Base;
 using Selfra_Core.Constaint;
@@ -85,10 +86,10 @@ namespace Selfra_Services.Service
 
         public async Task HandlePayOSWebhookAsync(string rawBody, string checksumHeader)
         {
-            //if (!VerifyWebhookSignature(rawBody, checksumHeader))
-            //{ 
-            //    throw new Exception("Signature không hợp lệ.");
-            //}
+            if (!IsValidData(rawBody, checksumHeader))
+            {
+                throw new Exception("Signature không hợp lệ.");
+            }
 
             PayOSWebhookPayload payload =
                 JsonConvert.DeserializeObject<PayOSWebhookPayload>(rawBody)
@@ -132,15 +133,47 @@ namespace Selfra_Services.Service
             await _unitOfWork.SaveAsync();
         }
 
-            private bool VerifyWebhookSignature(string rawBody, string checksumHeader)
+        public bool IsValidData(string transaction, string transactionSignature)
         {
-            // Dùng checksum key từ cấu hình
-            var checksumKey = _payOSOptions.ChecksumKey;
-            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(checksumKey));
-            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(rawBody));
-            var calculated = BitConverter.ToString(hash).Replace("-", "").ToLower();
+            try
+            {
+                JObject jsonObject = JObject.Parse(transaction);
 
-            return calculated == checksumHeader.ToLower();
+                var sortedKeys = jsonObject.Properties()
+                                           .Select(p => p.Name)
+                                           .OrderBy(k => k, StringComparer.Ordinal)
+                                           .ToList();
+
+                var sb = new StringBuilder();
+                for (int i = 0; i < sortedKeys.Count; i++)
+                {
+                    var key = sortedKeys[i];
+                    var value = jsonObject[key]?.ToString();
+                    sb.Append($"{key}={value}");
+                    if (i < sortedKeys.Count - 1)
+                        sb.Append("&");
+                }
+
+                string computedSignature = ComputeHmacSHA256(sb.ToString(), _payOSOptions.ChecksumKey);
+                return computedSignature.Equals(transactionSignature, StringComparison.OrdinalIgnoreCase);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return false;
+            }
+        }
+
+        private string ComputeHmacSHA256(string message, string key)
+        {
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+
+            using (var hmac = new HMACSHA256(keyBytes))
+            {
+                byte[] hash = hmac.ComputeHash(messageBytes);
+                return BitConverter.ToString(hash).Replace("-", "").ToLower();
+            }
         }
     }
 
