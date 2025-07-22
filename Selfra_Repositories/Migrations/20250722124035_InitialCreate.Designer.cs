@@ -12,8 +12,8 @@ using Selfra_Repositories.Base;
 namespace Selfra_Repositories.Migrations
 {
     [DbContext(typeof(SelfraDBContext))]
-    [Migration("20250525084156_InitMigration")]
-    partial class InitMigration
+    [Migration("20250722124035_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,41 @@ namespace Selfra_Repositories.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Selfra_Entity.Entity.FcmToken", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FcmTokens");
+                });
 
             modelBuilder.Entity("Selfra_Entity.Model.ApplicationRole", b =>
                 {
@@ -431,6 +466,9 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ConversationName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -446,8 +484,11 @@ namespace Selfra_Repositories.Migrations
                     b.Property<bool>("IsGroup")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LastMessageAt")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("LastMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastSenderName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastUpdatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -545,6 +586,9 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Level")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
@@ -559,6 +603,8 @@ namespace Selfra_Repositories.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CreatorId");
+
+                    b.HasIndex("PackageId");
 
                     b.ToTable("Courses");
                 });
@@ -984,6 +1030,9 @@ namespace Selfra_Repositories.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Packages");
@@ -993,6 +1042,12 @@ namespace Selfra_Repositories.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ArticleUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CategoryPost")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -1009,7 +1064,10 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastUpdatedBy")
@@ -1339,6 +1397,15 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime>("LastUpdatedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PaymentLinkId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PaymentMethod")
                         .HasColumnType("nvarchar(max)");
 
@@ -1353,6 +1420,8 @@ namespace Selfra_Repositories.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PackageId");
 
                     b.HasIndex("UserPackageId");
 
@@ -1502,6 +1571,9 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("LastUpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1511,17 +1583,18 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("PackageId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PackageId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserPackages");
                 });
@@ -1604,7 +1677,7 @@ namespace Selfra_Repositories.Migrations
             modelBuilder.Entity("Selfra_Entity.Model.ConversationParticipant", b =>
                 {
                     b.HasOne("Selfra_Entity.Model.Conversation", "Conversation")
-                        .WithMany()
+                        .WithMany("Participants")
                         .HasForeignKey("ConversationId");
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
@@ -1626,9 +1699,15 @@ namespace Selfra_Repositories.Migrations
                         .WithMany()
                         .HasForeignKey("CreatorId");
 
+                    b.HasOne("Selfra_Entity.Model.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId");
+
                     b.Navigation("Category");
 
                     b.Navigation("Creator");
+
+                    b.Navigation("Package");
                 });
 
             modelBuilder.Entity("Selfra_Entity.Model.FoodDetail", b =>
@@ -1700,7 +1779,7 @@ namespace Selfra_Repositories.Migrations
             modelBuilder.Entity("Selfra_Entity.Model.Message", b =>
                 {
                     b.HasOne("Selfra_Entity.Model.Conversation", "Conversation")
-                        .WithMany()
+                        .WithMany("Messages")
                         .HasForeignKey("ConversationId");
 
                     b.HasOne("Selfra_Entity.Model.ApplicationUser", "Sender")
@@ -1804,9 +1883,15 @@ namespace Selfra_Repositories.Migrations
 
             modelBuilder.Entity("Selfra_Entity.Model.Transaction", b =>
                 {
+                    b.HasOne("Selfra_Entity.Model.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId");
+
                     b.HasOne("Selfra_Entity.Model.UserPackage", "UserPackage")
                         .WithMany()
                         .HasForeignKey("UserPackageId");
+
+                    b.Navigation("Package");
 
                     b.Navigation("UserPackage");
                 });
@@ -1862,18 +1947,19 @@ namespace Selfra_Repositories.Migrations
                         .WithMany()
                         .HasForeignKey("PackageId");
 
-                    b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Package");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Selfra_Entity.Model.Category", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Selfra_Entity.Model.Conversation", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("Selfra_Entity.Model.Course", b =>
