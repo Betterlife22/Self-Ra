@@ -9,5 +9,6 @@ namespace Selfra_ModelViews.Model.PackageModel
         public int Duration { get; set; }
         public bool IsPublic { get; set; }
         public decimal Price { get; set; }
+        public int Rank { get; set; }
     }
 }

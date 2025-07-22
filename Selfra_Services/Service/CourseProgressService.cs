@@ -68,7 +68,22 @@ namespace Selfra_Services.Service
         public async Task EnrollCourse(CourseEnrollModel courseEnrollModel)
         {
             var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
+            var couser = await _unitOfWork.GetRepository<Course>().GetByPropertyAsync(c => c.Id == courseEnrollModel.CourseId);
+            var checkfree = await CheckFree(couser.PackageId);
+            if(checkfree == false)
+            {
+                var checkPackage = await _unitOfWork.GetRepository<UserPackage>().GetByPropertyAsync(p => p.UserId == userId);
+                if (checkPackage == null) throw new Exception("User not in any packages");
+                var userPackage = await _unitOfWork.GetRepository<Package>().GetByPropertyAsync(p => p.Id == checkPackage.PackageId);
+                var coursePackage = await _unitOfWork.GetRepository<Package>().GetByPropertyAsync(p => p.Id == couser.PackageId);
 
+                var checkCanAccess = CanAccessCourse(userPackage.Rank,coursePackage.Rank);
+                if (checkCanAccess == false) throw new Exception("User can not access to this course");
+            }
+
+           
+            var checkexisted = await _unitOfWork.GetRepository<UserCourseProgress>().GetAllByPropertyAsync(uc=>uc.CourseId == courseEnrollModel.CourseId);
+            if(checkexisted.Count() > 0) throw  new  Exception("User can only enroll course once");
             var courseProgress = _mapper.Map<UserCourseProgress>(courseEnrollModel);
             courseProgress.UserId = Guid.Parse(userId);
             await _unitOfWork.GetRepository<UserCourseProgress>().AddAsync(courseProgress);
@@ -190,6 +205,17 @@ namespace Selfra_Services.Service
             lesson.UserId = Guid.Parse(userId);
             await _unitOfWork.GetRepository<UserLessonProgress>().AddAsync(lesson);
             await _unitOfWork.SaveAsync();
+        }
+        private bool CanAccessCourse(int userPackageRank, int courseRequiredRank)
+        {
+            return userPackageRank >= courseRequiredRank;
+        }
+        private async Task<bool> CheckFree (string packageId)
+        {
+          
+            var package = await _unitOfWork.GetRepository<Package>().GetByPropertyAsync(p=>p.Id == packageId);
+            if (package.Rank == 0) return true;
+            return false;
         }
     }
 }
