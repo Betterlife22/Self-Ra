@@ -77,9 +77,17 @@ namespace SELF_RA.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await _courseProgressService.EnrollCourse(courseEnrollModel);
-            var response = BaseResponseModel<string>.OkMessageResponseModel("Enroll Successfull");
-            return new OkObjectResult(response);
+            try
+            {
+                await _courseProgressService.EnrollCourse(courseEnrollModel);
+                var response = BaseResponseModel<string>.OkMessageResponseModel("Enroll Successfull");
+                return new OkObjectResult(response);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message.ToString());
+            }
+            
         }
         [HttpGet("GetUserCourseProgress")]
         public async Task<IActionResult> GetUserCourseProgress([FromQuery]  string courseid)

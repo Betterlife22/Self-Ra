@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Selfra_Repositories.Base;
 
@@ -11,9 +12,11 @@ using Selfra_Repositories.Base;
 namespace Selfra_Repositories.Migrations
 {
     [DbContext(typeof(SelfraDBContext))]
-    partial class SelfraDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250722100429_TenthMigration")]
+    partial class TenthMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,9 +206,6 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool?>("isMentor")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -1396,9 +1396,6 @@ namespace Selfra_Repositories.Migrations
 
                     b.Property<DateTime>("LastUpdatedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<long?>("OrderCode")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(max)");
