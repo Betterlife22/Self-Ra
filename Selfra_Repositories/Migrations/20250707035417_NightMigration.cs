@@ -5,21 +5,15 @@
 namespace Selfra_Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class SixthMigration : Migration
+    public partial class NightMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "OrderId",
+            migrationBuilder.AddColumn<long>(
+                name: "OrderCode",
                 table: "Transactions",
-                type: "nvarchar(max)",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "PaymentLinkId",
-                table: "Transactions",
-                type: "nvarchar(max)",
+                type: "bigint",
                 nullable: true);
         }
 
@@ -27,11 +21,7 @@ namespace Selfra_Repositories.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "OrderId",
-                table: "Transactions");
-
-            migrationBuilder.DropColumn(
-                name: "PaymentLinkId",
+                name: "OrderCode",
                 table: "Transactions");
         }
     }

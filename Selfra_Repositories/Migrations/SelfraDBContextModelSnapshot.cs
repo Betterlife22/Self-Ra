@@ -22,6 +22,41 @@ namespace Selfra_Repositories.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Selfra_Entity.Entity.FcmToken", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FcmTokens");
+                });
+
             modelBuilder.Entity("Selfra_Entity.Model.ApplicationRole", b =>
                 {
                     b.Property<Guid>("Id")
@@ -168,6 +203,9 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool?>("isMentor")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -548,6 +586,9 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Level")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
@@ -562,6 +603,8 @@ namespace Selfra_Repositories.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CreatorId");
+
+                    b.HasIndex("PackageId");
 
                     b.ToTable("Courses");
                 });
@@ -987,6 +1030,9 @@ namespace Selfra_Repositories.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Packages");
@@ -1351,6 +1397,9 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime>("LastUpdatedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<long?>("OrderCode")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(max)");
 
@@ -1525,6 +1574,9 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("LastUpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1533,6 +1585,9 @@ namespace Selfra_Repositories.Migrations
 
                     b.Property<string>("PackageId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
@@ -1647,9 +1702,15 @@ namespace Selfra_Repositories.Migrations
                         .WithMany()
                         .HasForeignKey("CreatorId");
 
+                    b.HasOne("Selfra_Entity.Model.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId");
+
                     b.Navigation("Category");
 
                     b.Navigation("Creator");
+
+                    b.Navigation("Package");
                 });
 
             modelBuilder.Entity("Selfra_Entity.Model.FoodDetail", b =>

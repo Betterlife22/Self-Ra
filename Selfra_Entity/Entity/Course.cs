@@ -9,6 +9,7 @@ namespace Selfra_Entity.Model
         public string? Description { get; set; }
         public string? AccessType { get; set; }
         public string? CategoryId { get; set; }
+        public string? PackageId { get; set; }
         public Guid? CreatorId { get; set; }
         public string? ThumbnailUrl { get; set; }
         public string? Level { get; set; }
@@ -17,6 +18,7 @@ namespace Selfra_Entity.Model
      
 
         public virtual Category? Category { get; set; }
+        public virtual Package? Package { get; set; }
         public virtual ApplicationUser? Creator { get; set; }
         public virtual ICollection<Lesson>? Lessons { get; set; }
         public virtual ICollection<Quiz>? Quizzes { get; set; }

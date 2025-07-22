@@ -2,10 +2,12 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Net.payOS;
 using Net.payOS.Types;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Selfra_Contract_Services.Interface;
 using Selfra_Core.Base;
 using Selfra_Core.Constaint;
@@ -26,13 +28,14 @@ namespace Selfra_Services.Service
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PayOS _payOS;
         private readonly PayOSOptions _payOSOptions;
-
-        public PaymentService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, PayOS payOS, IOptions<PayOSOptions> payosOptions)
+        private readonly ILogger _logger;
+        public PaymentService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, PayOS payOS, IOptions<PayOSOptions> payosOptions, ILogger logger)
         {
             _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
             _payOS = payOS;
             _payOSOptions = payosOptions.Value;
+            _logger = logger;
         }
         public async Task<CreatePaymentResultModel> CreatePaymentLinkAsync(string packageId)
         {
@@ -53,19 +56,22 @@ namespace Selfra_Services.Service
                 (int)package.Price,
                 $"Thanh toán gói {package.Name}",
                 new List<ItemData> { item },
-                $"{"https://vi.wikipedia.org/wiki/Th%C3%A0nh_c%C3%B4ng"}/payment-success",
-                $"{"https://vi.wikipedia.org/wiki/Th%E1%BA%A5t_b%E1%BA%A1i"}/payment-cancel");
+                $"{"https://vi.wikipedia.org/wiki/Th%E1%BA%A5t_b%E1%BA%A1i"}/payment-cancel",
+                $"{"https://vi.wikipedia.org/wiki/Th%C3%A0nh_c%C3%B4ng"}/payment-success")
+                ;
                 
             var result =  await _payOS.createPaymentLink(payMentData);
 
             Transaction transaction = new Transaction
             {
-                OrderId = orderId.ToString(),
+                OrderId = orderId.ToString(),               
                 PaymentLinkId = result.paymentLinkId,
+                OrderCode = orderCode,
                 PackageId = packageId,
                 PaymentMethod = "PayOS",
                 PaymentStatus = "Pending",
                 Total = package.Price,
+                CreatedBy = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor)
             };
             await _unitOfWork.GetRepository<Transaction>().AddAsync(transaction);
             await _unitOfWork.SaveAsync();
@@ -80,51 +86,94 @@ namespace Selfra_Services.Service
 
         public async Task HandlePayOSWebhookAsync(string rawBody, string checksumHeader)
         {
-            if(VerifyWebhookSignature(rawBody, checksumHeader))
+            if (!IsValidData(rawBody, checksumHeader))
             {
-                throw new ErrorException(StatusCodes.Status401Unauthorized, ResponseCodeConstants.UNAUTHORIZED, "Signature không hợp lệ.");
+                throw new Exception("Signature không hợp lệ.");
             }
-            var data = JsonConvert.DeserializeObject<PayOSWebhookPayload>(rawBody);
 
-            var ordercode = data.orderCode.ToString();
+            PayOSWebhookPayload payload =
+                JsonConvert.DeserializeObject<PayOSWebhookPayload>(rawBody)
+                ?? throw new Exception("Payload rỗng hoặc không hợp lệ.");
 
-            Transaction transaction = _unitOfWork.GetRepository<Transaction>().Entities.FirstOrDefault(t => t.OrderId == ordercode)
-                ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy Transaction");
+            long orderCode = payload.Data?.OrderCode
+                ?? throw new Exception("Payload thiếu OrderCode.");
 
-            if (data.status == "SUCCEEDED")
+            Transaction transaction =
+                _unitOfWork.GetRepository<Transaction>().Entities
+                    .FirstOrDefault(t => t.OrderCode == orderCode)
+                ?? throw new Exception("Không tìm thấy Transaction.");
+
+            bool succeeded =
+                payload.Success ||
+                string.Equals(payload.Data?.Code, "00", StringComparison.OrdinalIgnoreCase);
+
+            if (succeeded)
             {
                 transaction.PaymentStatus = "Success";
-                transaction.LastUpdatedTime = DateTime.Now;
+                transaction.LastUpdatedTime = DateTime.UtcNow;
+
+                
+
                 UserPackage userPackage = new UserPackage
                 {
                     PackageId = transaction.PackageId,
-                    UserId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor),
-                    CreatedBy = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor),
+                    UserId = transaction.CreatedBy,
+                    CreatedBy = transaction.CreatedBy
                 };
 
                 await _unitOfWork.GetRepository<UserPackage>().AddAsync(userPackage);
-
+                transaction.UserPackageId = userPackage.Id;
             }
             else
             {
                 transaction.PaymentStatus = "Failed";
             }
 
-            
             await _unitOfWork.GetRepository<Transaction>().UpdateAsync(transaction);
             await _unitOfWork.SaveAsync();
-
         }
 
-        private bool VerifyWebhookSignature(string rawBody, string checksumHeader)
+        public bool IsValidData(string transaction, string transactionSignature)
         {
-            // Dùng checksum key từ cấu hình
-            var checksumKey = _payOSOptions.ChecksumKey;
-            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(checksumKey));
-            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(rawBody));
-            var calculated = BitConverter.ToString(hash).Replace("-", "").ToLower();
+            try
+            {
+                JObject jsonObject = JObject.Parse(transaction);
 
-            return calculated == checksumHeader.ToLower();
+                var sortedKeys = jsonObject.Properties()
+                                           .Select(p => p.Name)
+                                           .OrderBy(k => k, StringComparer.Ordinal)
+                                           .ToList();
+
+                var sb = new StringBuilder();
+                for (int i = 0; i < sortedKeys.Count; i++)
+                {
+                    var key = sortedKeys[i];
+                    var value = jsonObject[key]?.ToString();
+                    sb.Append($"{key}={value}");
+                    if (i < sortedKeys.Count - 1)
+                        sb.Append("&");
+                }
+
+                string computedSignature = ComputeHmacSHA256(sb.ToString(), _payOSOptions.ChecksumKey);
+                return computedSignature.Equals(transactionSignature, StringComparison.OrdinalIgnoreCase);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return false;
+            }
+        }
+
+        private string ComputeHmacSHA256(string message, string key)
+        {
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+
+            using (var hmac = new HMACSHA256(keyBytes))
+            {
+                byte[] hash = hmac.ComputeHash(messageBytes);
+                return BitConverter.ToString(hash).Replace("-", "").ToLower();
+            }
         }
     }
 

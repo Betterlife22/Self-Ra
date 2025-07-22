@@ -9,6 +9,7 @@ namespace Selfra_Contract_Services.Interface
         Task Register(RegisterRequestModel model);
 
         Task<UserInfoModel> GetUserInfo();
+        
 
         Task Delete(string id);
 

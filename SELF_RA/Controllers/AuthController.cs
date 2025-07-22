@@ -11,10 +11,11 @@ namespace SELF_RA.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
+        private readonly IFireBaseService _firebaseService;
+        public AuthController(IAuthService authService, IFireBaseService firebaseService)
         {
             _authService = authService;
+            _firebaseService = firebaseService;
         }
 
         [HttpGet]
@@ -29,6 +30,11 @@ namespace SELF_RA.Controllers
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             TokenResponse model = await _authService.Login(loginRequest);
+            if(loginRequest.FcmToken != null)
+            {
+                await _firebaseService.SaveOrUpdateTokenAsync(loginRequest.UserName, loginRequest.FcmToken);
+            }
+
 
             return Ok(BaseResponseModel<string>.OkDataResponse(model, "Đăng nhập thành công"));
         }

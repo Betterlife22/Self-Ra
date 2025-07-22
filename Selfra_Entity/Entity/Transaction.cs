@@ -8,6 +8,7 @@ namespace Selfra_Entity.Model
         public string? PaymentLinkId { get; set; }
         public string? PackageId { get; set; }
         public string? UserPackageId { get; set; }
+        public long? OrderCode { get; set; }
         public decimal Total { get; set; }
         public string? PaymentMethod { get; set; }
         public string? PaymentStatus { get; set; }

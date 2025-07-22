@@ -8,6 +8,8 @@ namespace Selfra_ModelViews.Model.QuizzModel
 {
     public class AnswerViewModel
     {
+        public string Id { get; set; }
+
         public string? AnswerText { get; set; }
 
     }

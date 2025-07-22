@@ -12,8 +12,8 @@ using Selfra_Repositories.Base;
 namespace Selfra_Repositories.Migrations
 {
     [DbContext(typeof(SelfraDBContext))]
-    [Migration("20250620034508_FifthMigration")]
-    partial class FifthMigration
+    [Migration("20250707035417_NightMigration")]
+    partial class NightMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1354,6 +1354,18 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime>("LastUpdatedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<long?>("OrderCode")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PaymentLinkId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PaymentMethod")
                         .HasColumnType("nvarchar(max)");
 
@@ -1368,6 +1380,8 @@ namespace Selfra_Repositories.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PackageId");
 
                     b.HasIndex("UserPackageId");
 
@@ -1529,14 +1543,12 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PackageId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserPackages");
                 });
@@ -1819,9 +1831,15 @@ namespace Selfra_Repositories.Migrations
 
             modelBuilder.Entity("Selfra_Entity.Model.Transaction", b =>
                 {
+                    b.HasOne("Selfra_Entity.Model.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId");
+
                     b.HasOne("Selfra_Entity.Model.UserPackage", "UserPackage")
                         .WithMany()
                         .HasForeignKey("UserPackageId");
+
+                    b.Navigation("Package");
 
                     b.Navigation("UserPackage");
                 });
@@ -1877,13 +1895,7 @@ namespace Selfra_Repositories.Migrations
                         .WithMany()
                         .HasForeignKey("PackageId");
 
-                    b.HasOne("Selfra_Entity.Model.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Package");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Selfra_Entity.Model.Category", b =>

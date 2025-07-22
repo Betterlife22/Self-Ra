@@ -1,11 +1,13 @@
 ﻿
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Selfra_Contract_Services.Interface;
 using Selfra_Core.Base;
 using Selfra_Core.Constaint;
 using Selfra_Core.ExceptionCustom;
+using Selfra_Core.Utils;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.MentorContact;
 using Selfra_Services.Infrastructure;
@@ -18,6 +20,7 @@ namespace Selfra_Services.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IMapper _mapper;
+        private readonly IHubContext<Hub> _hubContext;
 
         public MentorContactService(IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor, IMapper mapper)
         {
@@ -54,7 +57,7 @@ namespace Selfra_Services.Service
 
         }
 
-        public async Task<PaginatedList<ResponseMentorContact>> GetAllMentorContact(string? searchName, int index, int PageSize)
+        public async Task<PaginatedList<ResponseMentorContact>> GetAllMentorContact(string? MentorId, int index, int PageSize)
         {
             IQueryable<ResponseMentorContact> query = from mentorcontact in _unitOfWork.GetRepository<MentorContact>().Entities
                                                       where !mentorcontact.DeletedTime.HasValue
@@ -67,9 +70,9 @@ namespace Selfra_Services.Service
                                                           UserId = mentorcontact.UserId
                                                       };
 
-            if (!string.IsNullOrWhiteSpace(searchName))
+            if (!string.IsNullOrWhiteSpace(MentorId))
             {
-                query = query.Where(s => s.UserId.ToString()!.Contains(searchName));
+                query = query.Where(s => s.MentorId.ToString()!.Contains(MentorId));
             }
 
             PaginatedList<ResponseMentorContact> paginatedMentorContact = await _unitOfWork.GetRepository<ResponseMentorContact>().GetPagingAsync(query, index, PageSize);
@@ -85,6 +88,16 @@ namespace Selfra_Services.Service
 
             return model;
         }
+
+        //public async Task NotifyMentorAsync(string mentorId, string message)
+        //{
+        //    var connectionId = MentorConnection.GetConnectionId(mentorId);
+        //    if (!string.IsNullOrEmpty(connectionId))
+        //    {
+        //        await _hubContext.Clients.Client(connectionId)
+        //            .SendAsync("ReceiveNotification", message);
+        //    }
+        //}
 
         public async Task UpdateMentorContact(UpdateMentorContact updateMentorContact)
         {

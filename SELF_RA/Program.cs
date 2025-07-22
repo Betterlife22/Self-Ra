@@ -36,6 +36,8 @@ builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 builder.Services.AddHttpClient();
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
+builder.Services.Configure<FireBaseSettings>
+    (builder.Configuration.GetSection("Firebase"));
 
 builder.Services.AddSingleton(sp =>
 {

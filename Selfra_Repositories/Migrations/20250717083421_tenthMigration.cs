@@ -5,25 +5,24 @@
 namespace Selfra_Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class ThirdMigration : Migration
+    public partial class tenthMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "IsActive",
-                table: "Posts",
+                name: "isMentor",
+                table: "AspNetUsers",
                 type: "bit",
-                nullable: false,
-                defaultValue: false);
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IsActive",
-                table: "Posts");
+                name: "isMentor",
+                table: "AspNetUsers");
         }
     }
 }

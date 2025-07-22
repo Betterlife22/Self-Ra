@@ -14,8 +14,10 @@ namespace Selfra_ModelViews.Model.CourseModel
         public string? Description { get; set; }
         public string? AccessType { get; set; }
         public string? CategoryId { get; set; }
+        public string? PackageId { get; set; }
+
         public Guid? CreatorId { get; set; }
-        public IFormFile? ThumbnailUrl { get; set; }
+        public IFormFile? ThumbnailUrl { get; set; } 
         public string? Level { get; set; }
         public int Duration { get; set; }
         public bool IsPublished { get; set; }

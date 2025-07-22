@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Selfra_Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -88,8 +88,10 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ConversationName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsGroup = table.Column<bool>(type: "bit", nullable: false),
-                    LastMessageAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastSenderName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -100,6 +102,25 @@ namespace Selfra_Repositories.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Conversations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FcmTokens",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FcmTokens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,6 +153,7 @@ namespace Selfra_Repositories.Migrations
                     Duration = table.Column<int>(type: "int", nullable: false),
                     IsPublic = table.Column<bool>(type: "bit", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Rank = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -326,8 +348,11 @@ namespace Selfra_Repositories.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ArticleUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CategoryPost = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -500,9 +525,11 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PackageId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -513,11 +540,6 @@ namespace Selfra_Repositories.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserPackages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserPackages_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_UserPackages_Packages_PackageId",
                         column: x => x.PackageId,
@@ -535,6 +557,7 @@ namespace Selfra_Repositories.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccessType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    PackageId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Level = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -559,6 +582,11 @@ namespace Selfra_Repositories.Migrations
                         name: "FK_Courses_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Courses_Packages_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Packages",
                         principalColumn: "Id");
                 });
 
@@ -658,6 +686,9 @@ namespace Selfra_Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentLinkId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PackageId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserPackageId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Total = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -672,6 +703,11 @@ namespace Selfra_Repositories.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Packages_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Packages",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Transactions_UserPackages_UserPackageId",
                         column: x => x.UserPackageId,
@@ -1040,6 +1076,11 @@ namespace Selfra_Repositories.Migrations
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Courses_PackageId",
+                table: "Courses",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FoodDetails_LessonId",
                 table: "FoodDetails",
                 column: "LessonId");
@@ -1145,6 +1186,11 @@ namespace Selfra_Repositories.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Transactions_PackageId",
+                table: "Transactions",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_UserPackageId",
                 table: "Transactions",
                 column: "UserPackageId");
@@ -1183,11 +1229,6 @@ namespace Selfra_Repositories.Migrations
                 name: "IX_UserPackages_PackageId",
                 table: "UserPackages",
                 column: "PackageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserPackages_UserId",
-                table: "UserPackages",
-                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -1213,6 +1254,9 @@ namespace Selfra_Repositories.Migrations
 
             migrationBuilder.DropTable(
                 name: "ConversationParticipants");
+
+            migrationBuilder.DropTable(
+                name: "FcmTokens");
 
             migrationBuilder.DropTable(
                 name: "FoodDetails");
@@ -1287,13 +1331,13 @@ namespace Selfra_Repositories.Migrations
                 name: "Quizzes");
 
             migrationBuilder.DropTable(
-                name: "Packages");
-
-            migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Packages");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -8,10 +8,10 @@ namespace Selfra_ModelViews.Model.PaymentModel
 {
     public class PayOSWebhookPayload
     {
-        public long orderCode { get; set; }
-        public string status { get; set; } = default!;
-        public string paymentLinkId { get; set; } = default!;
-        public int amount { get; set; }
-        public string description { get; set; } = default!;
+        public string? Code { get; set; }
+        public string Description { get; set; } = default!;
+        public bool Success { get; set; }
+        public PayOSData? Data { get; set; }
+        public string? Signature { get; set; }
     }
 }

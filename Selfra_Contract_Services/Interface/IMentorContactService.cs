@@ -7,7 +7,7 @@ namespace Selfra_Contract_Services.Interface
 {
     public interface IMentorContactService
     {
-        Task<PaginatedList<ResponseMentorContact>> GetAllMentorContact(string? searchName, int index, int PageSize);
+        Task<PaginatedList<ResponseMentorContact>> GetAllMentorContact(string? MentorId, int index, int PageSize);
 
         Task<ResponseMentorContact> GetMentorContactById (string? id);  
 
@@ -15,6 +15,8 @@ namespace Selfra_Contract_Services.Interface
 
         Task UpdateMentorContact (UpdateMentorContact updateMentorContact);
 
+
         Task DeleteMentorContact (string? id);
+        //Task NotifyMentorAsync(string mentorId, string message);
     }
 }

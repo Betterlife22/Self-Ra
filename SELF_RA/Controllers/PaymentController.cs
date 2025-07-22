@@ -11,10 +11,11 @@ namespace SELF_RA.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IPayMentService _payMentService;
-
-        public PaymentController(IPayMentService payMentService)
+        private readonly ILogger _logger;
+        public PaymentController(IPayMentService payMentService, ILogger logger)
         {
             _payMentService = payMentService;
+            _logger = logger;
         }
 
         [HttpPost("CreateLinkPayMent")]
@@ -29,8 +30,14 @@ namespace SELF_RA.Controllers
             using var reader = new StreamReader(Request.Body);
             var rawBody = await reader.ReadToEndAsync();
             var checksum = Request.Headers["x-checksum"].ToString();
-
-            await _payMentService.HandlePayOSWebhookAsync(rawBody, checksum);
+            try
+            {
+                await _payMentService.HandlePayOSWebhookAsync(rawBody, checksum);
+            }catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            
             return Ok(new { success = true }); 
         }
     }
