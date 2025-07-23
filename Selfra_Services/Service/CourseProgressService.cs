@@ -72,7 +72,7 @@ namespace Selfra_Services.Service
             var checkfree = await CheckFree(couser.PackageId);
             if(checkfree == false)
             {
-                var checkPackage = await _unitOfWork.GetRepository<UserPackage>().GetByPropertyAsync(p => p.UserId == userId);
+                var checkPackage = await _unitOfWork.GetRepository<UserPackage>().GetByPropertyAsync(p => p.UserId == userId && p.PackageId == couser.PackageId);
                 if (checkPackage == null) throw new Exception("User not in any packages");
                 var userPackage = await _unitOfWork.GetRepository<Package>().GetByPropertyAsync(p => p.Id == checkPackage.PackageId);
                 var coursePackage = await _unitOfWork.GetRepository<Package>().GetByPropertyAsync(p => p.Id == couser.PackageId);
@@ -82,7 +82,7 @@ namespace Selfra_Services.Service
             }
 
            
-            var checkexisted = await _unitOfWork.GetRepository<UserCourseProgress>().GetAllByPropertyAsync(uc=>uc.CourseId == courseEnrollModel.CourseId);
+            var checkexisted = await _unitOfWork.GetRepository<UserCourseProgress>().GetAllByPropertyAsync(uc=>uc.CourseId == courseEnrollModel.CourseId && uc.UserId == Guid.Parse(userId));
             if(checkexisted.Count() > 0) throw  new  Exception("User can only enroll course once");
             var courseProgress = _mapper.Map<UserCourseProgress>(courseEnrollModel);
             courseProgress.UserId = Guid.Parse(userId);
