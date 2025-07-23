@@ -33,8 +33,8 @@ namespace Selfra_Services.Service
         {
             ApplicationUser user = await _unitOfWork.GetRepository<ApplicationUser>().Entities.FirstOrDefaultAsync(u => u.Id == model.UserId && !u.DeletedTime.HasValue)
                 ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy UserID");
-            Mentor check = await _unitOfWork.GetRepository<Mentor>().Entities.FirstOrDefaultAsync(m => m.UserId == model.UserId && !m.DeletedTime.HasValue)
-                ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "User nay da co ho so mentor");
+            Mentor? check = await _unitOfWork.GetRepository<Mentor>().Entities.FirstOrDefaultAsync(m => m.UserId == model.UserId && !m.DeletedTime.HasValue);
+                if(check != null) throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "User nay da co Mentor");
             Mentor mentor = _mapper.Map<Mentor>(model);
 
             user.isMentor = true;
@@ -92,10 +92,10 @@ namespace Selfra_Services.Service
             return paginatedMentor;
         }
 
-        public async Task<ResponseMentorModel> GetMentorById(string mentorId)
+        public async Task<ResponseMentorModel> GetMentorById(string userId)
         {
 
-            Mentor mentor = await _unitOfWork.GetRepository<Mentor>().Entities.FirstOrDefaultAsync(m => m.Id == mentorId && !m.DeletedTime.HasValue)
+            Mentor mentor = await _unitOfWork.GetRepository<Mentor>().Entities.FirstOrDefaultAsync(m => m.UserId.ToString() == userId && !m.DeletedTime.HasValue)
                ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy mentor");
 
             ResponseMentorModel model = _mapper.Map<ResponseMentorModel>(mentor);

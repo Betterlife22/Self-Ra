@@ -43,9 +43,9 @@ namespace SELF_RA.Controllers
         }
 
         [HttpGet("GetAllMentorContact")]
-        public async Task<IActionResult> GetAllMentorContact(string? MentorId, int index = 1, int PageSize = 10)
+        public async Task<IActionResult> GetAllMentorContact(string? userId, string? MentorId, int index = 1, int PageSize = 10)
         {
-            PaginatedList<ResponseMentorContact> list = await _mentorContactService.GetAllMentorContact(MentorId, index, PageSize);
+            PaginatedList<ResponseMentorContact> list = await _mentorContactService.GetAllMentorContact( userId,MentorId, index, PageSize);
             return Ok(BaseResponse<ResponseMentorContact>.OkDataResponse(list, "Lấy danh sách thành công"));
         }
         [HttpGet("GetMentorContactById")]

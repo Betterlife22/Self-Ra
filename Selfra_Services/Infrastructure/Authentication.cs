@@ -17,7 +17,7 @@ namespace Selfra_Services.Infrastructure
 {
     public class Authentication
     {
-        public static async Task<TokenResponse> CreateToken(ApplicationUser? user, string role, JwtSettings jwtSettings, bool isRefresh = false)
+        public static async Task<TokenResponse> CreateToken(ApplicationUser? user, string role, JwtSettings jwtSettings, string? packageName, bool isRefresh = false)
         {
             // Tạo ra các claims
             DateTime now = DateTime.Now;
@@ -65,7 +65,10 @@ namespace Selfra_Services.Infrastructure
 
                 refreshTokenString = new JwtSecurityTokenHandler().WriteToken(refreshToken);
             }
-
+            if (packageName == null)
+            {
+                packageName = "Free";
+            }
             return new TokenResponse
             {
                 AccessToken = accessTokenString,
@@ -76,6 +79,8 @@ namespace Selfra_Services.Infrastructure
                     Username = user.UserName,
                     Email = user.Email,
                     FullName = user.FullName,
+                    isMentor = user.isMentor ?? false,
+                    UserPackageName = packageName,
                     PhoneNumber = user.PhoneNumber,
                     CreatedTime = user.CreatedTime,
                     Role = role.ToString(),

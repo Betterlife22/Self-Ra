@@ -56,8 +56,8 @@ namespace Selfra_Services.Service
                 (int)package.Price,
                 $"Thanh toán gói {package.Name}",
                 new List<ItemData> { item },
-                $"{"https://vi.wikipedia.org/wiki/Th%E1%BA%A5t_b%E1%BA%A1i"}/payment-cancel",
-                $"{"https://vi.wikipedia.org/wiki/Th%C3%A0nh_c%C3%B4ng"}/payment-success")
+                $"{"myapp://payment-cancel"}/payment-cancel",
+                $"{"myapp://payment-success"}/payment-success")
                 ;
                 
             var result =  await _payOS.createPaymentLink(payMentData);
@@ -84,12 +84,8 @@ namespace Selfra_Services.Service
             
         }
 
-        public async Task HandlePayOSWebhookAsync(string rawBody, string checksumHeader)
+        public async Task HandlePayOSWebhookAsync(string rawBody)
         {
-            if (!IsValidData(rawBody, checksumHeader))
-            {
-                throw new Exception("Signature không hợp lệ.");
-            }
 
             PayOSWebhookPayload payload =
                 JsonConvert.DeserializeObject<PayOSWebhookPayload>(rawBody)

@@ -9,6 +9,8 @@ namespace Selfra_Contract_Services.Interface
     {
         Task<CreatePaymentResultModel> CreatePaymentLinkAsync(string packageId);
 
-        Task HandlePayOSWebhookAsync(string rawBody, string checksumHeader);
+        Task HandlePayOSWebhookAsync(string rawBody);
+
+        public bool IsValidData(string transaction, string transactionSignature);
     }
 }
