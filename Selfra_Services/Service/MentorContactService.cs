@@ -57,7 +57,7 @@ namespace Selfra_Services.Service
 
         }
 
-        public async Task<PaginatedList<ResponseMentorContact>> GetAllMentorContact(string? MentorId, int index, int PageSize)
+        public async Task<PaginatedList<ResponseMentorContact>> GetAllMentorContact(string? userId ,string? MentorId, int index, int PageSize)
         {
             IQueryable<ResponseMentorContact> query = from mentorcontact in _unitOfWork.GetRepository<MentorContact>().Entities
                                                       where !mentorcontact.DeletedTime.HasValue
@@ -73,6 +73,11 @@ namespace Selfra_Services.Service
             if (!string.IsNullOrWhiteSpace(MentorId))
             {
                 query = query.Where(s => s.MentorId.ToString()!.Contains(MentorId));
+            }
+
+            if(!string.IsNullOrWhiteSpace(userId))
+            {
+                query = query.Where(s => s.UserId.ToString()!.Contains(userId));
             }
 
             PaginatedList<ResponseMentorContact> paginatedMentorContact = await _unitOfWork.GetRepository<ResponseMentorContact>().GetPagingAsync(query, index, PageSize);

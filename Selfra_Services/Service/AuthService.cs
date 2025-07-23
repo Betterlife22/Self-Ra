@@ -85,7 +85,17 @@ namespace Selfra_Services.Service
             await _unitOfWork.GetRepository<ApplicationUser>().UpdateAsync(userUpdate);
             await _unitOfWork.SaveAsync();
 
-            TokenResponse tokenrs = await Authentication.CreateToken(result.User!, result.RoleName!, _jwtSettings);
+            UserPackage? check = await _unitOfWork.GetRepository<UserPackage>().Entities
+                .FirstOrDefaultAsync(u => u.UserId == result.User.Id.ToString() && !u.DeletedTime.HasValue);
+            string packageName = "";
+            if (check != null)
+            {
+                 packageName = await _unitOfWork.GetRepository<Package>().Entities
+                    .Where(p => p.Id == check.PackageId && !p.DeletedTime.HasValue)
+                    .Select(p => p.Name)
+                    .FirstOrDefaultAsync();
+            }
+            TokenResponse tokenrs = await Authentication.CreateToken(result.User!, result.RoleName!, _jwtSettings, packageName);
 
             return tokenrs;
             
@@ -110,7 +120,7 @@ namespace Selfra_Services.Service
                 ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy người dùng");
 
             // 2. Tạo token mới
-            TokenResponse response = await Authentication.CreateToken(user, userRole!, _jwtSettings, true);
+            TokenResponse response = await Authentication.CreateToken(user, userRole!, _jwtSettings,null ,true);
             response.RefreshToken = string.Empty;
             response.User = null;
             return response;

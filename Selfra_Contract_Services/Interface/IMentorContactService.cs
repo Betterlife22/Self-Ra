@@ -7,7 +7,7 @@ namespace Selfra_Contract_Services.Interface
 {
     public interface IMentorContactService
     {
-        Task<PaginatedList<ResponseMentorContact>> GetAllMentorContact(string? MentorId, int index, int PageSize);
+        Task<PaginatedList<ResponseMentorContact>> GetAllMentorContact(string? userId,string? MentorId, int index, int PageSize);
 
         Task<ResponseMentorContact> GetMentorContactById (string? id);  
 

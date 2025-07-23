@@ -22,6 +22,10 @@
         /// </summary>
         public string? FullName { get; set; }
 
+        public bool? isMentor { get; set; } = false;
+
+        public string? UserPackageName { get; set; }
+
         /// <summary>
         /// Số điện thoại người dùng
         /// </summary>
@@ -37,5 +41,7 @@
         /// Thời gian tạo
         /// </summary>
         public DateTimeOffset CreatedTime { get; set; }
+
+        
     }
 }

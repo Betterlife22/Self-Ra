@@ -1,8 +1,11 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Selfra_Contract_Services.Interface;
 using Selfra_Core.Base;
 using Selfra_ModelViews.Model.PaymentModel;
+using Selfra_Services.Service;
+using System.Text;
 
 namespace SELF_RA.Controllers
 {
@@ -29,10 +32,19 @@ namespace SELF_RA.Controllers
         {
             using var reader = new StreamReader(Request.Body);
             var rawBody = await reader.ReadToEndAsync();
-            var checksum = Request.Headers["x-checksum"].ToString();
+        
+            JObject obj = JObject.Parse(rawBody);
+            JObject data = (JObject)obj["data"]!;
+            string signature = obj["signature"]!.ToString();
+            var isValid = _payMentService.IsValidData(data.ToString(), signature);
+
+            if (!isValid)
+            {
+                return BadRequest("Invalid data signature");
+            }
             try
             {
-                await _payMentService.HandlePayOSWebhookAsync(rawBody, checksum);
+                await _payMentService.HandlePayOSWebhookAsync(rawBody);
             }catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
