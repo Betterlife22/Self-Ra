@@ -7,6 +7,8 @@ namespace Selfra_Entity.Model
         public string? UserId { get; set; }
         public string? PackageId { get; set; }
         public string? Status { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate  { get; set; }
         public virtual Package? Package { get; set; }
 
     }

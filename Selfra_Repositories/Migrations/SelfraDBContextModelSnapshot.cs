@@ -586,6 +586,9 @@ namespace Selfra_Repositories.Migrations
                     b.Property<string>("Level")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
@@ -600,6 +603,8 @@ namespace Selfra_Repositories.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CreatorId");
+
+                    b.HasIndex("PackageId");
 
                     b.ToTable("Courses");
                 });
@@ -1024,6 +1029,9 @@ namespace Selfra_Repositories.Migrations
                     b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1566,6 +1574,9 @@ namespace Selfra_Repositories.Migrations
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("LastUpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1574,6 +1585,9 @@ namespace Selfra_Repositories.Migrations
 
                     b.Property<string>("PackageId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
@@ -1688,9 +1702,15 @@ namespace Selfra_Repositories.Migrations
                         .WithMany()
                         .HasForeignKey("CreatorId");
 
+                    b.HasOne("Selfra_Entity.Model.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId");
+
                     b.Navigation("Category");
 
                     b.Navigation("Creator");
+
+                    b.Navigation("Package");
                 });
 
             modelBuilder.Entity("Selfra_Entity.Model.FoodDetail", b =>
