@@ -1,6 +1,7 @@
 ﻿using Selfra_Core.Base;
 using Selfra_ModelViews.Model.PackageModel;
 using Selfra_ModelViews.Model.PostModel;
+using Selfra_ModelViews.Model.ZaloModel;
 
 namespace Selfra_Contract_Services.Interface
 {
@@ -15,5 +16,7 @@ namespace Selfra_Contract_Services.Interface
         Task<ResponsePackageModel> GetPackageById(string id);
 
         Task<PaginatedList<ResponsePackageModel>> GetAllPackage(string? searchName, int index, int PageSize);
+        Task<List<ZaloViewModel>> GetAllZaloGroup();
+        Task<ZaloViewModel> GetZaloGroupById (string id);
     }
 }

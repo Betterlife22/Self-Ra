@@ -52,6 +52,7 @@ namespace Selfra_Repositories.Base
         public DbSet<UserNewsPreference> UserNewsPreferences { get; set; }
         public DbSet<UserPackage> UserPackages { get; set; }
         public DbSet<FcmToken> FcmTokens { get; set; }
+        public DbSet<ZaloGroup> ZaloGroups { get; set; }
 
         public virtual DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
         public virtual DbSet<ApplicationRole> ApplicationRoles => Set<ApplicationRole>();
