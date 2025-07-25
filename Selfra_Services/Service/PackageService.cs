@@ -7,9 +7,11 @@ using Selfra_Contract_Services.Interface;
 using Selfra_Core.Base;
 using Selfra_Core.Constaint;
 using Selfra_Core.ExceptionCustom;
+using Selfra_Entity.Entity;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.PackageModel;
 using Selfra_ModelViews.Model.PostModel;
+using Selfra_ModelViews.Model.ZaloModel;
 using Selfra_Services.Infrastructure;
 using Selft.Contract.Repositories.Interface;
 
@@ -75,6 +77,13 @@ namespace Selfra_Services.Service
             return paginatedpackage;
         }
 
+        public async Task<List<ZaloViewModel>> GetAllZaloGroup()
+        {
+            var list = await _unitOfWork.GetRepository<ZaloGroup>().GetAllByPropertyAsync();
+            var resutl = _mapper.Map<List<ZaloViewModel>>(list);
+            return resutl;
+        }
+
         public async Task<ResponsePackageModel> GetPackageById(string id)
         {
             Package check = await _unitOfWork.GetRepository<Package>().Entities.FirstOrDefaultAsync(p => p.Id == id && !p.DeletedTime.HasValue)
@@ -83,6 +92,13 @@ namespace Selfra_Services.Service
             ResponsePackageModel model = _mapper.Map<ResponsePackageModel>(check);
 
             return model;
+        }
+
+        public async Task<ZaloViewModel> GetZaloGroupById(string id)
+        {
+            var group = await _unitOfWork.GetRepository<ZaloGroup>().GetByPropertyAsync(z=>z.Id == id);
+            var resutl = _mapper.Map<ZaloViewModel>(group);
+            return resutl;
         }
 
         public async Task UpdatePackage(UpdatePackageModel model)

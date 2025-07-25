@@ -4,6 +4,8 @@ using Selfra_Contract_Services.Interface;
 using Selfra_Core.Base;
 using Selfra_ModelViews.Model.PackageModel;
 using Selfra_ModelViews.Model.PostModel;
+using Selfra_ModelViews.Model.ZaloModel;
+using System.Collections.Generic;
 
 namespace SELF_RA.Controllers
 {
@@ -51,6 +53,18 @@ namespace SELF_RA.Controllers
             await _packageService.DeletePackage(id);
             return Ok(BaseResponse<string>.OkMessageResponseModel("Xóa Package thành công"));
         }
+        [HttpGet("GetAllZaloGroup")]
+        public async Task<IActionResult> GetAllZaloGroup()
+        {
+            var list = await _packageService.GetAllZaloGroup();
+            return new OkObjectResult(BaseResponse<List<ZaloViewModel>>.OkDataResponse(list, "Lấy Group thành công"));
+        }
+        [HttpGet("GetZaloGroupById")]
+        public async Task<IActionResult> GetZaloGroupById([FromQuery] string Id)
+        {
+            var group = await _packageService.GetZaloGroupById(Id);
+            return new OkObjectResult(BaseResponse<ZaloViewModel>.OkDataResponse(group, "Lấy Group thành công"));
 
+        }
     }
 }
