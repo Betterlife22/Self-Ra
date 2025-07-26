@@ -32,9 +32,9 @@ namespace SELF_RA.Controllers
             return Ok(BaseResponse<ResponseMentorModel>.OkDataResponse(list, "Lấy danh sách thành công"));
         }
         [HttpGet("GetMentorById")]
-        public async Task<IActionResult> GetMentorById(string userId)
+        public async Task<IActionResult> GetMentorById(string mentorId)
         {
-            ResponseMentorModel model = await _mentorService.GetMentorById(userId);
+            ResponseMentorModel model = await _mentorService.GetMentorById(mentorId);
             return Ok(BaseResponse<ResponseMentorModel>.OkDataResponse(model, "Lấy Mentor thành công"));
         }
 

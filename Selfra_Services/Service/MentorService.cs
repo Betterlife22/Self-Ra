@@ -99,10 +99,10 @@ namespace Selfra_Services.Service
             return paginatedMentor;
         }
 
-        public async Task<ResponseMentorModel> GetMentorById(string userId)
+        public async Task<ResponseMentorModel> GetMentorById(string mentorId)
         {
 
-            Mentor mentor = await _unitOfWork.GetRepository<Mentor>().Entities.FirstOrDefaultAsync(m => m.UserId.ToString() == userId && !m.DeletedTime.HasValue)
+            Mentor mentor = await _unitOfWork.GetRepository<Mentor>().Entities.FirstOrDefaultAsync(m => m.Id.ToString() == mentorId && !m.DeletedTime.HasValue)
                ?? throw new ErrorException(StatusCodes.Status400BadRequest, ResponseCodeConstants.BADREQUEST, "Không tìm thấy mentor");
 
             ResponseMentorModel model = _mapper.Map<ResponseMentorModel>(mentor);

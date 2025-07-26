@@ -16,6 +16,6 @@ namespace Selfra_Contract_Services.Interface
 
         Task DeleteMentor(string mentorId);
 
-        Task<ResponseMentorModel> GetMentorById(string userId);
+        Task<ResponseMentorModel> GetMentorById(string mentorId);
     }
 }
