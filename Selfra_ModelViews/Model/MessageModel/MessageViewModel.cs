@@ -11,6 +11,7 @@ namespace Selfra_ModelViews.Model.MessageModel
         public string? SenderName { get; set; }
         public string? Content { get; set; }
         public bool IsRead { get; set; }
+        public DateTime CreatedTime { get; set; }
 
     }
 }
