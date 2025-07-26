@@ -2,6 +2,7 @@
 
 using AutoMapper;
 using Selfra_Entity.Model;
+using Selfra_ModelViews.Model.CategoryModel;
 using Selfra_ModelViews.Model.CommentVoteModel;
 using Selfra_ModelViews.Model.FoodDetailModel;
 using Selfra_ModelViews.Model.ForumModel;
@@ -59,6 +60,8 @@ namespace Selfra_Services.MapperProfile
             CreateMap<CreatePackageModel, Package>().ReverseMap();
             CreateMap<UpdatePackageModel, Package>().ReverseMap();
             CreateMap<ResponsePackageModel, Package>().ReverseMap();
+            CreateMap<Category, CategoryViewModel>().ReverseMap();
+            CreateMap<Category,CategoryModifyModel>().ReverseMap();
         }
     }
 }
