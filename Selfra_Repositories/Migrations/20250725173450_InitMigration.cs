@@ -37,6 +37,9 @@ namespace Selfra_Repositories.Migrations
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isMentor = table.Column<bool>(type: "bit", nullable: true),
+                    UserMentorId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PackageId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserPackageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     LastUpdatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -165,6 +168,25 @@ namespace Selfra_Repositories.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Packages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ZaloGroups",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GroupURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ZaloGroups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -1298,6 +1320,9 @@ namespace Selfra_Repositories.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserNewsPreferences");
+
+            migrationBuilder.DropTable(
+                name: "ZaloGroups");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

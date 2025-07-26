@@ -23,6 +23,8 @@
         public string? FullName { get; set; }
 
         public bool? isMentor { get; set; } = false;
+        public string? MentorId { get; set; }
+        public string? PackageId { get; set; }
 
         public string? UserPackageName { get; set; }
 

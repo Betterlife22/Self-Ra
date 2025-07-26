@@ -87,15 +87,14 @@ namespace Selfra_Services.Service
 
             UserPackage? check = await _unitOfWork.GetRepository<UserPackage>().Entities
                 .FirstOrDefaultAsync(u => u.UserId == result.User.Id.ToString() && !u.DeletedTime.HasValue);
-            string packageName = "";
+            Package package = new Package();
             if (check != null)
             {
-                 packageName = await _unitOfWork.GetRepository<Package>().Entities
+                package = await _unitOfWork.GetRepository<Package>().Entities
                     .Where(p => p.Id == check.PackageId && !p.DeletedTime.HasValue)
-                    .Select(p => p.Name)
                     .FirstOrDefaultAsync();
             }
-            TokenResponse tokenrs = await Authentication.CreateToken(result.User!, result.RoleName!, _jwtSettings, packageName);
+            TokenResponse tokenrs = await Authentication.CreateToken(result.User!, result.RoleName!, _jwtSettings, package);
 
             return tokenrs;
             

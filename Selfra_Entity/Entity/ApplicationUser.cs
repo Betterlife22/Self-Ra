@@ -18,6 +18,12 @@ namespace Selfra_Entity.Model
 
         public bool? isMentor { get; set; } = false;
 
+        public string? UserMentorId { get; set; }
+
+        public string? PackageId { get; set; }
+
+        public string? UserPackageName { get; set; }
+
         /// <summary>
         /// Ngày tạo tài khoản
         /// </summary>

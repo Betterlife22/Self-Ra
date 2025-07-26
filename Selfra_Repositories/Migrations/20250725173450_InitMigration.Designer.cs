@@ -12,7 +12,7 @@ using Selfra_Repositories.Base;
 namespace Selfra_Repositories.Migrations
 {
     [DbContext(typeof(SelfraDBContext))]
-    [Migration("20250723024909_InitMigration")]
+    [Migration("20250725173450_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />
@@ -58,6 +58,42 @@ namespace Selfra_Repositories.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FcmTokens");
+                });
+
+            modelBuilder.Entity("Selfra_Entity.Entity.ZaloGroup", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GroupURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ZaloGroups");
                 });
 
             modelBuilder.Entity("Selfra_Entity.Model.ApplicationRole", b =>
@@ -185,6 +221,9 @@ namespace Selfra_Repositories.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
@@ -203,9 +242,15 @@ namespace Selfra_Repositories.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<string>("UserMentorId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("UserPackageName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("isMentor")
                         .HasColumnType("bit");

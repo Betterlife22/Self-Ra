@@ -38,10 +38,13 @@ namespace Selfra_Services.Service
             Mentor mentor = _mapper.Map<Mentor>(model);
 
             user.isMentor = true;
+            
             mentor.CreatedTime = DateTime.Now;
             mentor.CreatedBy = Authentication.GetUserIdFromHttpContextAccessor(_contextAccessor);
+          
 
             await _unitOfWork.GetRepository<Mentor>().AddAsync(mentor);
+            user.UserMentorId = mentor.Id;
             await _unitOfWork.GetRepository<ApplicationUser>().UpdateAsync(user);
             await _unitOfWork.SaveAsync();
         }
@@ -76,6 +79,10 @@ namespace Selfra_Services.Service
                                                           Id = mentor.User.Id.ToString(),
                                                           Username = mentor.User.UserName,
                                                           Email = mentor.User.Email,
+                                                          isMentor = mentor.User.isMentor,
+                                                          MentorId = mentor.User.UserMentorId,
+                                                          UserPackageName = mentor.User.UserPackageName,
+                                                          PackageId = mentor.User.PackageId,
                                                           FullName = mentor.User.FullName,
                                                           PhoneNumber = mentor.User.PhoneNumber,
                                                           Role = "Mentor",
