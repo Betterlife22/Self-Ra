@@ -60,14 +60,19 @@ namespace Selfra_Services.Service
         public async Task<PaginatedList<ResponseMentorContact>> GetAllMentorContact(string? userId ,string? MentorId, int index, int PageSize)
         {
             IQueryable<ResponseMentorContact> query = from mentorcontact in _unitOfWork.GetRepository<MentorContact>().Entities
+                                                      join user in _unitOfWork.GetRepository<ApplicationUser>().Entities on mentorcontact.UserId equals user.Id
+                                                      join mentor in _unitOfWork.GetRepository<Mentor>().Entities on mentorcontact.MentorId equals mentor.Id
+                                                      join userMentor in _unitOfWork.GetRepository<ApplicationUser>().Entities on mentor.UserId equals userMentor.Id
                                                       where !mentorcontact.DeletedTime.HasValue
                                                       select new ResponseMentorContact
                                                       {
                                                           MentorContactId = mentorcontact.Id,
-                                                          MentorId = mentorcontact.MentorId,
+                                                          MentorId = mentorcontact.MentorId,    
+                                                          MentorName = userMentor.UserName,
                                                           Message = mentorcontact.Message,
                                                           Status = mentorcontact.Status,
-                                                          UserId = mentorcontact.UserId
+                                                          UserId = mentorcontact.UserId,
+                                                          UserName = user.UserName
                                                       };
 
             if (!string.IsNullOrWhiteSpace(MentorId))
