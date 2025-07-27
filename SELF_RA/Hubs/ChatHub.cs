@@ -27,17 +27,18 @@ namespace SELF_RA.Hubs
             _httpContextAccessor = httpContextAccessor;
             _httpClient = httpClient;
         }
-        public async Task SendMessage(SendMessageModel sendMessage, string token, string senderid)
+        public async Task SendMessage(string sendMessage, string token, string senderid)
         {
-            var json = JsonSerializer.Serialize(sendMessage);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            //var json = JsonSerializer.Serialize(sendMessage);
+            var content = new StringContent(sendMessage, Encoding.UTF8, "application/json");
 
             // Set the bearer token
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var message = JsonSerializer.Deserialize<SendMessageModel>(sendMessage);
 
             // Make the POST request
-            var response = await _httpClient.PostAsync("https://localhost:7126/api/message/sendmessage", content);
-            await Clients.All.SendAsync("ReceiveMessage",senderid, sendMessage.Content);
+            var response = await _httpClient.PostAsync("https://selfraapp.azurewebsites.net/api/message/sendmessage", content);
+            await Clients.All.SendAsync("ReceiveMessage",senderid, message.Content);
 
         }
         //public async Task MarkAsRead (string conversationid,string token,string senderid)
