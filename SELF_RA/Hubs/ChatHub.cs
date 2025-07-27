@@ -34,7 +34,12 @@ namespace SELF_RA.Hubs
 
             // Set the bearer token
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var message = JsonSerializer.Deserialize<SendMessageModel>(sendMessage);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var message = JsonSerializer.Deserialize<SendMessageModel>(sendMessage,options);
 
             // Make the POST request
             var response = await _httpClient.PostAsync("https://selfraapp.azurewebsites.net/api/message/sendmessage", content);
