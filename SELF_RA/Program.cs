@@ -1,4 +1,5 @@
 using Amazon.S3;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -74,6 +75,9 @@ app.UseMiddleware<PermissionMiddleware>();
 app.MapControllers();
 app.MapHub<ChatHub>("/chathub", opt =>
 {
-    opt.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+    //opt.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+    opt.Transports = HttpTransportType.WebSockets |
+                      HttpTransportType.LongPolling |
+                      HttpTransportType.ServerSentEvents;
 });
 app.Run();
