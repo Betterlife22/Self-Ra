@@ -18,8 +18,26 @@ namespace Selfra_Services.MapperProfile
             CreateMap<Message, SendMessageModel>().ReverseMap();
             CreateMap<Message, MessageViewModel>().ForMember(dest => dest.SenderName,
                opt => opt.MapFrom(src => src.Sender != null ? src.Sender.UserName : "Unknown")).ReverseMap();
-            CreateMap<Conversation, ConversationViewModel>().ReverseMap();
-            CreateMap<ZaloGroup,ZaloViewModel>().ReverseMap();
+            CreateMap<Conversation, ConversationViewModel>()
+                .AfterMap((src, dest, context) =>
+                {
+                    var currentUserId = (Guid)context.Items["CurrentUserId"];
+
+                    if (!src.IsGroup)
+                    {
+                        var otherParticipant = src.Participants
+                            .FirstOrDefault(p => p.UserId != currentUserId);
+
+                        if (otherParticipant?.User != null)
+                        {
+                            dest.ConversationName = otherParticipant?.User?.UserName ?? "Unknown";
+                        }
+                    }
+
+                    dest.Messages = src.Messages != null
+                        ? src.Messages.Select(m => context.Mapper.Map<MessageViewModel>(m)).ToList()
+                        : new List<MessageViewModel>();
+                }); CreateMap<ZaloGroup,ZaloViewModel>().ReverseMap();
         }
     }
 }

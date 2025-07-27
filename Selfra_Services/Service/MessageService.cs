@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Execution;
 using Microsoft.AspNetCore.Http;
+using Microsoft.VisualBasic;
 using Selfra_Contract_Services.Interface;
 using Selfra_Entity.Model;
 using Selfra_ModelViews.Model.MessageModel;
@@ -78,14 +79,21 @@ namespace Selfra_Services.Service
             var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
             var conversationList = await _unitOfWork.GetRepository<Conversation>()
                 .GetAllByPropertyAsync(c=>c.Participants.Any(u=>u.UserId == Guid.Parse(userId)),includeProperties:"Participants");
-            var result = _mapper.Map<List<ConversationViewModel>>(conversationList);
+            var result = _mapper.Map<List<ConversationViewModel>>(conversationList, opt =>
+            {
+                opt.Items["CurrentUserId"] = Guid.Parse(userId);
+            });
             return result;
         }
 
         public async Task<ConversationViewModel> GetConversation(string id)
         {
+            var userId = Authentication.GetUserIdFromHttpContextAccessor(_httpContextAccessor);
             var conversation = await _unitOfWork.GetRepository<Conversation>().GetByPropertyAsync(c=>c.Id == id,includeProperties:"Messages");
-            var result = _mapper.Map<ConversationViewModel>(conversation);
+            var result = _mapper.Map<ConversationViewModel>(conversation, opt =>
+            {
+                opt.Items["CurrentUserId"] = Guid.Parse(userId);
+            });
             return result;
         }
 
