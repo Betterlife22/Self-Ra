@@ -53,6 +53,7 @@ namespace Selfra_Services
             services.AddScoped <IPackageService, PackageService>();
             services.AddScoped<IPayMentService, PaymentService>();
             services.AddScoped<IFireBaseService, FireBaseServicen>();
+            services.AddScoped<IODataService, ODataService>(); 
         }
     }
 }

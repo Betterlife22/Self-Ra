@@ -21,6 +21,14 @@ namespace Selfra_Repositories.Base
             modelBuilder.Entity<Package>()
                 .Property(t => t.Price)
                 .HasPrecision(18, 2);
+            //modelBuilder.Entity<ApplicationUserLogins>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
+            //modelBuilder.Entity<ApplicationUserTokens>().HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
+            //modelBuilder.Entity<ApplicationUserRoles>().HasKey(r => new { r.UserId, r.RoleId });
+            modelBuilder.Entity<ApplicationUserRoles>(entity =>
+            {
+                entity.HasKey(ar => new { ar.UserId, ar.RoleId }); // Khóa composite
+            });
+
 
         }
         public DbSet<Book> Books { get; set; }

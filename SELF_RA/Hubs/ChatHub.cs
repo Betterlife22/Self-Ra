@@ -42,7 +42,7 @@ namespace SELF_RA.Hubs
             var message = JsonSerializer.Deserialize<SendMessageModel>(sendMessage,options);
 
             // Make the POST request
-            var response = await _httpClient.PostAsync("https://selfraapp.azurewebsites.net/api/message/sendmessage", content);
+            var response = await _httpClient.PostAsync("https://selfra.azurewebsites.net/api/message/sendmessage", content);
             await Clients.All.SendAsync("ReceiveMessage",senderid, message.Content);
 
         }

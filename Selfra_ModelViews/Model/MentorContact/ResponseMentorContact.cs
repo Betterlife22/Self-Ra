@@ -1,9 +1,12 @@
 ﻿
 
+using System.ComponentModel.DataAnnotations;
+
 namespace Selfra_ModelViews.Model.MentorContact
 {
     public class ResponseMentorContact
     {
+        [Key]
         public string? MentorContactId { get; set; }
         public string? MentorId { get; set; }
         public string? MentorName { get; set; }
