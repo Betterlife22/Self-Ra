@@ -1,16 +1,19 @@
-﻿namespace Selfra_ModelViews.Model.UserModel
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Selfra_ModelViews.Model.UserModel
 {
     public class ResponseUserModel
     {
         /// <summary>
         /// Id của người dùng
         /// </summary>
+        [Key]
         public string? Id { get; set; }
 
         /// <summary>
         /// Tên đăng nhập của người dùng
         /// </summary>
-        public string? Username { get; set; }
+        public string? UserName { get; set; }
 
         /// <summary>
         /// Email của người dùng

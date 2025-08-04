@@ -1,9 +1,12 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace Selfra_ModelViews.Model.PackageModel
 {
     public class ResponsePackageModel
     {
-        public string? PackageId { get; set; }
+        [Key]
+        public string? Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public int Duration { get; set; }

@@ -77,7 +77,7 @@ namespace Selfra_Services.Service
                                                       User = new ResponseUserModel
                                                       {
                                                           Id = mentor.User.Id.ToString(),
-                                                          Username = mentor.User.UserName,
+                                                          UserName = mentor.User.UserName,
                                                           Email = mentor.User.Email,
                                                           isMentor = mentor.User.isMentor,
                                                           MentorId = mentor.User.UserMentorId,

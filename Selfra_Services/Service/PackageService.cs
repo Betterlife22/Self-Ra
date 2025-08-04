@@ -64,7 +64,7 @@ namespace Selfra_Services.Service
                                                       Duration = package.Duration,
                                                       IsPublic = package.IsPublic,
                                                       Name = package.Name,
-                                                      PackageId = package.Id,
+                                                      Id = package.Id,
                                                       Price = package.Price
                                                   };
 

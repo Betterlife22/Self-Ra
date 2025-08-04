@@ -7,6 +7,7 @@ namespace Selft.Contract.Repositories.Interface
 {
     public interface IGenericRepository<T> where T : class
     {
+        IQueryable<T> GetByOdata();
         Task<IEnumerable<T>> GetAllAsync();
         IQueryable<T> Entities { get; }
         IQueryable<T> GetQueryableByProperty(Expression<Func<T, bool>>? filter = null, string? includeProperties = null);

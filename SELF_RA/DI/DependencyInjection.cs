@@ -205,9 +205,13 @@ namespace SELF_RA.DI
         {
             services.AddDbContext<SelfraDBContext>(options =>
             {
-                options.UseLazyLoadingProxies().UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(
+                    configuration.GetConnectionString("DefaultConnection"),
+                    sqlOptions => sqlOptions.EnableRetryOnFailure()
+                );
             });
         }
+
         public static void OpenAiSettingsConfig(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton(option =>

@@ -1,11 +1,13 @@
 ﻿
 
 using Selfra_ModelViews.Model.UserModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Selfra_ModelViews.Model.MentorModel
 {
     public class ResponseMentorModel
     {
+        [Key]
         public string? Id { get; set; }
         public Guid? UserId { get; set; }
         public string? Bio { get; set; }

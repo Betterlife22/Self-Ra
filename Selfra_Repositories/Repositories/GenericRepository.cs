@@ -22,6 +22,7 @@ namespace Selfra_Repositories.Repositories
             return await _dbSet.ToListAsync();
         }
 
+
         public async Task<T?> GetByIdAsync(object id)
         {
             return await _dbSet.FindAsync(id);
@@ -106,6 +107,11 @@ namespace Selfra_Repositories.Repositories
                 query = query.Where(filter);
             }
             return await query.FirstOrDefaultAsync();
+        }
+
+        public IQueryable<T> GetByOdata()
+        {
+            return _dbSet.AsQueryable();
         }
     }
 }
