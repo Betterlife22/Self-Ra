@@ -30,14 +30,14 @@ namespace SELF_RA.Controllers
             
             await _mentorContactService.CreateMentorContact(model);
             var mentor = await _mentorService.GetMentorById(model.MentorId);
-
+            var user = await _authService.GetUserById(model.UserId);
             var token = await _firebaseSerivce.GetTokenByUserIdAsync(mentor.UserId.ToString());
             
             if (!string.IsNullOrEmpty(token))
             {
                 await _firebaseSerivce.SendNotificationAsync(token,
                     "New Contact Request",
-                    $"User {model.UserId} says: {model.Message}");
+                    $"User {user.UserName} says: {model.Message}");
             }
             return Ok(BaseResponse<string>.OkMessageResponseModel("Tạo mới MentorContact thành công"));
         }

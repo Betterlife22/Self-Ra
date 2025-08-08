@@ -205,10 +205,12 @@ namespace SELF_RA.DI
         {
             services.AddDbContext<SelfraDBContext>(options =>
             {
-                options.UseSqlServer(
-                    configuration.GetConnectionString("DefaultConnection"),
-                    sqlOptions => sqlOptions.EnableRetryOnFailure()
-                );
+                options
+                    .UseLazyLoadingProxies()
+                    .UseSqlServer(
+                        configuration.GetConnectionString("DefaultConnection"),
+                        sqlOptions => sqlOptions.EnableRetryOnFailure()
+                    );
             });
         }
 
