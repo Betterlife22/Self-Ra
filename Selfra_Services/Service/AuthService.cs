@@ -46,7 +46,11 @@ namespace Selfra_Services.Service
             await _unitOfWork.GetRepository<ApplicationUser>().UpdateAsync(user);
             await _unitOfWork.SaveAsync();
         }
-
+        public async Task<ApplicationUser> GetUserById (Guid? id)
+        {
+            var user = await _unitOfWork.GetRepository<ApplicationUser>().GetByPropertyAsync(u=>u.Id == id);
+            return user;
+        }
         public async Task<UserInfoModel> GetUserInfo()
         {
             ApplicationUser? user = await _unitOfWork.GetRepository<ApplicationUser>().Entities.FirstOrDefaultAsync
